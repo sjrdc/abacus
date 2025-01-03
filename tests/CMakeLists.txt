@@ -11,7 +11,7 @@ FetchContent_MakeAvailable(googletest)
 
 enable_testing()
 
-add_executable(test_abacus main.cpp)
+add_executable(test_abacus test_abacus.cpp main.cpp)
 target_link_libraries(test_abacus abacus gtest_main)
 
 include(GoogleTest)
