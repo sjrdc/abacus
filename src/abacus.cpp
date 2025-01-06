@@ -27,6 +27,20 @@ namespace abacus
     {
         unary_function_symbols::unary_function_symbols() : x3::symbols<unary_function::function>()
         {
+            this->add("sin", [](double x) { return std::sin(x); });
+            this->add("sinh", [](double x) { return std::sinh(x); });
+            this->add("asin", [](double x) { return std::asin(x); });
+            this->add("asinh", [](double x) { return std::asinh(x); });
+            this->add("cos", [](double x) { return std::cos(x); });
+            this->add("cosh", [](double x) { return std::cosh(x); });
+            this->add("acos", [](double x) { return std::acos(x); });
+            this->add("acosh", [](double x) { return std::acosh(x); });
+            this->add("tan", [](double x) { return std::sin(x); });
+            this->add("tanh", [](double x) { return std::tanh(x); });
+            this->add("atan", [](double x) { return std::atan(x); });
+            this->add("log10", [](double x) { return std::log10(x); });
+            this->add("log2", [](double x) { return std::log2(x); });
+            this->add("log", [](double x) { return std::log(x); });
         }
 
         binary_function_symbols::binary_function_symbols() : x3::symbols<binary_function::function>()
