@@ -40,16 +40,19 @@ namespace abacus
 		x3::forward_ast<variable>
 	>
 	{
-
 	};
 
 	struct unary_function
 	{
+		using function = std::function<double(double)>;
+		function operation;
 		operand arg;
 	};
 
 	struct binary_function
 	{
+		using function = std::function<double(double,double)>;
+		function operation;
 		operand arg1;
 		operand arg2;
 	};

@@ -18,9 +18,27 @@
 */
 
 #include "ast.h"
+#include "ast_adapted.h"
+
+#include <boost/spirit/home/x3.hpp>
 
 namespace abacus
 {
+    namespace detail
+    {
+        namespace x3 = boost::spirit::x3;
+        
+        struct unary_function_symbols : x3::symbols<unary_function::function>
+        {
+            unary_function_symbols();
+        };
+
+        struct binary_function_symbols : x3::symbols<binary_function::function>
+        {
+            binary_function_symbols();
+        };
+    }
+
 	template <typename Iterator>
 	void parse(Iterator begin, Iterator end)
 	{

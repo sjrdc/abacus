@@ -17,7 +17,25 @@
 */
 
 #include "abacus.h"
+#include "ast.h"
+
+#include <functional>
+
 namespace abacus
 {
+    namespace detail
+    {
+        unary_function_symbols::unary_function_symbols() : x3::symbols<unary_function::function>()
+        {
+        }
 
+        binary_function_symbols::binary_function_symbols() : x3::symbols<binary_function::function>()
+        {
+            this->add("+", std::plus<double>());
+            this->add("/", std::divides<double>());
+            this->add("-", std::minus<double>());
+            this->add("*", std::multiplies<double>());
+            this->add("^", [](double a, double b) { return std::pow(a, b); });
+        }
+    }
 }
