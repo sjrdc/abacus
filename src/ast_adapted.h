@@ -18,12 +18,10 @@
 */
 
 #include "ast.h"
+#include <boost/fusion/include/adapt_struct.hpp>
 
-namespace abacus
-{
-	template <typename Iterator>
-	void parse(Iterator begin, Iterator end)
-	{
+BOOST_FUSION_ADAPT_STRUCT(abacus::unary_function, arg)
+BOOST_FUSION_ADAPT_STRUCT(abacus::binary_function, arg1, arg2)
+BOOST_FUSION_ADAPT_STRUCT(abacus::variable, name, value)
 
-	}
-}
+#endif

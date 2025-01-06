@@ -1,4 +1,3 @@
-#pragma once
 /*
     This file is part of abacus
     Copyright(C) 2025 Sjoerd Crijns
@@ -17,13 +16,28 @@
     along with this program.If not, see < https://www.gnu.org/licenses/>.
 */
 
-#include "ast.h"
+#include "calculator.h"
 
 namespace abacus
 {
-	template <typename Iterator>
-	void parse(Iterator begin, Iterator end)
-	{
 
-	}
+    double calculator::operator()(nil)
+    {
+        throw std::runtime_error("operation not implemented");
+    }
+    
+    double calculator::operator()(binary_function)
+    {
+        return 0.;
+    }
+    
+    double calculator::operator()(unary_function)
+    {
+        return 0.;
+    }
+
+    double calculator::operator()(variable)
+    {
+        return 0.;
+    }
 }

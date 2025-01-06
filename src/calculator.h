@@ -21,9 +21,11 @@
 
 namespace abacus
 {
-	template <typename Iterator>
-	void parse(Iterator begin, Iterator end)
-	{
-
-	}
+    class calculator
+    {
+        double operator()(nil);
+        double operator()(binary_function);
+        double operator()(unary_function);
+        double operator()(variable);
+    };
 }

@@ -18,7 +18,7 @@
 
 #include <gtest/gtest.h>
 
-TEST(abacus, FOO)
+TEST(abacus, can_perform_arithmetic)
 {
 	EXPECT_TRUE(true);
 }
