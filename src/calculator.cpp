@@ -21,23 +21,24 @@
 namespace abacus
 {
 
-    double calculator::operator()(nil)
+    double calculator::operator()(nil&)
     {
         throw std::runtime_error("operation not implemented");
     }
     
-    double calculator::operator()(binary_function)
+    double calculator::operator()(binary_function& f)
     {
         return 0.;
     }
     
-    double calculator::operator()(unary_function)
+    double calculator::operator()(unary_function& f)
     {
         return 0.;
     }
 
-    double calculator::operator()(variable)
+    double calculator::operator()(variable& v)
     {
-        return 0.;
+        if (v.value) return *v.value;
+        throw std::runtime_error("variable " + v.name + " has no value");
     }
 }

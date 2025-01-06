@@ -23,9 +23,9 @@ namespace abacus
 {
     class calculator
     {
-        double operator()(nil);
-        double operator()(binary_function);
-        double operator()(unary_function);
-        double operator()(variable);
+        double operator()(nil&);
+        double operator()(binary_function&);
+        double operator()(unary_function&);
+        double operator()(variable&);
     };
 }
