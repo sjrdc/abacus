@@ -16,9 +16,41 @@
     along with this program.If not, see < https://www.gnu.org/licenses/>.
 */
 
+#include "abacus.h"
+#include "calculator.h"
+
 #include <gtest/gtest.h>
 
-TEST(abacus, can_perform_arithmetic)
+namespace
 {
-	EXPECT_TRUE(true);
+    struct arithmetic_parameter
+    {
+        std::string expression;
+        double value;
+    };
+
+    class ArithmeticTest :
+        public testing::TestWithParam<arithmetic_parameter>
+    {
+    };
+
+    auto number_arithmetic_test_values = testing::Values<arithmetic_parameter>(
+        arithmetic_parameter("1. + 1.", 2.),
+        arithmetic_parameter("1. - 1.", 0.),
+        arithmetic_parameter("2. * 3.", 6.),
+        arithmetic_parameter("12. / 3.", 4.),
+        arithmetic_parameter("2. ^ 5.", 64.)
+    );
 }
+
+TEST_P(ArithmeticTest, can_perform_number_arithmetic)
+{
+    auto& p = GetParam();
+    auto parsed = abacus::parse(p.expression.begin(), p.expression.end());
+    ASSERT_TRUE(parsed.has_value());
+
+    abacus::calculator calculator;
+    EXPECT_DOUBLE_EQ(calculator(parsed.value()), p.value);
+}
+
+INSTANTIATE_TEST_SUITE_P(ArithmeticTest, ArithmeticTest, number_arithmetic_test_values);

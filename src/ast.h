@@ -33,7 +33,7 @@ namespace abacus
 	
 	namespace x3 = boost::spirit::x3;
 
-	struct operand : public boost::variant<double,
+	struct expression: public boost::variant<double,
 		nil,
 		x3::forward_ast<unary_function>,
 		x3::forward_ast<binary_function>, 
@@ -46,15 +46,15 @@ namespace abacus
 	{
 		using function = std::function<double(double)>;
 		function operation;
-		operand arg;
+		expression arg;
 	};
 
 	struct binary_function
 	{
 		using function = std::function<double(double,double)>;
 		function operation;
-		operand arg1;
-		operand arg2;
+		expression arg1;
+		expression arg2;
 	};
 
 	struct variable

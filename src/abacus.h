@@ -21,6 +21,7 @@
 #include "ast_adapted.h"
 
 #include <boost/spirit/home/x3.hpp>
+#include <expected>
 
 namespace abacus
 {
@@ -40,8 +41,15 @@ namespace abacus
     }
 
 	template <typename Iterator>
-	void parse(Iterator begin, Iterator end)
+    std::expected<::abacus::expression, std::string> parse(Iterator begin, Iterator end)
 	{
-
+        if (false)
+        {
+            return ::abacus::expression();
+        }
+        else
+        {
+            return std::unexpected("Could not parse");
+        }
 	}
 }

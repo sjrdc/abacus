@@ -25,7 +25,12 @@ namespace abacus
     {
         throw std::runtime_error("operation not implemented");
     }
-    
+
+    double calculator::operator()(expression& f)
+    {
+        return 0.;
+    }
+
     double calculator::operator()(binary_function& f)
     {
         return 0.;
