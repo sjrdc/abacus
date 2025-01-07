@@ -78,5 +78,6 @@ endif()
 
 option(BUILD_ABACUS_TESTS "Build tests" ON)
 if(BUILD_ABACUS_TESTS)
+    enable_testing()
     add_subdirectory(tests)
 endif()
