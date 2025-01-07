@@ -32,13 +32,14 @@ namespace
 		double value;
 	};
 
-	class ArithmeticTest :
+	class ParseAndCheck :
 		public testing::TestWithParam<test_parameter>
 	{
 	};
 
 	auto number_arithmetic_test_values = testing::Values<test_parameter>(
 		test_parameter("1. + 1.", 2.),
+		MAKE_TEST_VALUE(abs(1. + 1 + 1. + 2)),
 		test_parameter("1. - 1.", 0.),
 		test_parameter("2. * 3.", 6.),
 		test_parameter("12. / 3.", 4.),
@@ -63,14 +64,19 @@ namespace
 	);
 }
 
-TEST_P(ArithmeticTest, can_perform_number_arithmetic)
+void parse_and_check(const std::string& expression, double value)
 {
-	auto& p = GetParam();
-	auto parsed = abacus::parse(p.expression);
+	auto parsed = abacus::parse(expression);
 	ASSERT_TRUE(parsed.has_value());
 
 	abacus::calculator calculator;
-	EXPECT_DOUBLE_EQ(calculator(parsed.value()), p.value);
+	EXPECT_DOUBLE_EQ(calculator(parsed.value()), value);
 }
 
-INSTANTIATE_TEST_SUITE_P(ArithmeticTest, ArithmeticTest, number_arithmetic_test_values);
+TEST_P(ParseAndCheck, can_parse_and_calculate)
+{
+	auto& p = GetParam();
+	parse_and_check(p.expression, p.value);
+}
+
+INSTANTIATE_TEST_SUITE_P(ArithmeticTest,ParseAndCheck, number_arithmetic_test_values);

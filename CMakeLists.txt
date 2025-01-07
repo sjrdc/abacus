@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 3.8...3.30)
+cmake_minimum_required(VERSION 3.24...3.30)
 
 project(abacus LANGUAGES CXX VERSION 0.0.1)
 
@@ -18,8 +18,7 @@ else()
     if(APPLE OR CLANG_USE_LIBCPP)
         message(STATUS "Use libc++")
         add_compile_options(-stdlib=libc++)
-        # TODO: use add_link_options(-stdlib=libc++ -lc++abi") bud this needs cmake 3.13! CK
-        set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} -stdlib=libc++ -lc++abi")
+        add_link_options(-stdlib=libc++ -lc++abi)
     endif()
 
 endif()

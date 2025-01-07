@@ -17,7 +17,6 @@
 	along with this program.If not, see < https://www.gnu.org/licenses/>.
 */
 
-
 #include <boost/spirit/home/x3.hpp>
 #include <boost/spirit/home/x3/support/ast/variant.hpp>
 
