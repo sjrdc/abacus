@@ -44,11 +44,14 @@ namespace abacus
             this->add("log10", [](double x) { return std::log10(x); });
             this->add("log2", [](double x) { return std::log2(x); });
             this->add("log", [](double x) { return std::log(x); });
+            this->add("abs", [](double x) { return std::abs(x); });
         }
 
         binary_function_symbol::binary_function_symbol() : x3::symbols<detail::ast::binary_operation::function>()
         {
             this->add("atan2", [](double a, double b) { return std::atan2(a, b); });
+            this->add("min", [](double a, double b) { return std::min(a, b); });
+            this->add("max", [](double a, double b) { return std::max(a, b); });
         }
 
         additive_symbol::additive_symbol() : x3::symbols<detail::ast::binary_operation::function>()

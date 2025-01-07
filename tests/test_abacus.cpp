@@ -21,29 +21,28 @@
 
 #include <gtest/gtest.h>
 
-#include <vector>
 
-#define MAKE_TEST_VALUE(VAR) arithmetic_parameter(#VAR, std::VAR)
+#define MAKE_TEST_VALUE(VAR) test_parameter(#VAR, std::VAR)
 
 namespace
 {
-	struct arithmetic_parameter
+	struct test_parameter
 	{
 		std::string expression;
 		double value;
 	};
 
 	class ArithmeticTest :
-		public testing::TestWithParam<arithmetic_parameter>
+		public testing::TestWithParam<test_parameter>
 	{
 	};
 
-	auto number_arithmetic_test_values = testing::Values<arithmetic_parameter>(
-		arithmetic_parameter("1. + 1.", 2.),
-		arithmetic_parameter("1. - 1.", 0.),
-		arithmetic_parameter("2. * 3.", 6.),
-		arithmetic_parameter("12. / 3.", 4.),
-		arithmetic_parameter("2. ^ 5.", 32.),
+	auto number_arithmetic_test_values = testing::Values<test_parameter>(
+		test_parameter("1. + 1.", 2.),
+		test_parameter("1. - 1.", 0.),
+		test_parameter("2. * 3.", 6.),
+		test_parameter("12. / 3.", 4.),
+		test_parameter("2. ^ 5.", 32.),
 		MAKE_TEST_VALUE(sin(1.)),
 		MAKE_TEST_VALUE(sinh(2.)),
 		MAKE_TEST_VALUE(asin(1.)),
@@ -57,7 +56,10 @@ namespace
 		MAKE_TEST_VALUE(atan(1.)),
 		MAKE_TEST_VALUE(log10(1.)),
 		MAKE_TEST_VALUE(log2(1.)),
-		MAKE_TEST_VALUE(log(1.))
+		MAKE_TEST_VALUE(log(1.)),
+		MAKE_TEST_VALUE(abs(-1.)),
+		MAKE_TEST_VALUE(min(-1., 5.)),
+		MAKE_TEST_VALUE(max(-1., 5.))
 	);
 }
 
