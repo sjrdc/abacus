@@ -20,30 +20,38 @@
 
 namespace abacus
 {
+    calculator::result_type calculator::operator()(double d)
+    {
+        return d;
+    }
 
-    double calculator::operator()(nil&)
+    calculator::result_type calculator::operator()(detail::ast::nil&)
     {
         throw std::runtime_error("operation not implemented");
     }
 
-    double calculator::operator()(expression& f)
+    calculator::result_type calculator::operator()(detail::ast::expression& e)
     {
-        return 0.;
+        auto r = e.lhs.apply_visitor(*this);
+        for (auto& o : e.rhs)
+        {
+            r = o.op(r, o.rhs.apply_visitor(*this));
+        }
+        return r;
     }
 
-    double calculator::operator()(binary_function& f)
+    calculator::result_type calculator::operator()(detail::ast::binary_operation& f)
     {
-        return 0.;
+        return f.op(f.lhs.apply_visitor(*this), f.rhs.apply_visitor(*this));
     }
     
-    double calculator::operator()(unary_function& f)
+    calculator::result_type calculator::operator()(detail::ast::unary_operation& f)
     {
-        return 0.;
+        return f.op(f.rhs.apply_visitor(*this));
     }
 
-    double calculator::operator()(variable& v)
+    calculator::result_type calculator::operator()(detail::ast::operand& o)
     {
-        if (v.value) return *v.value;
-        throw std::runtime_error("variable " + v.name + " has no value");
+        return o.apply_visitor(*this);
     }
 }

@@ -19,13 +19,16 @@
 #include "abacus.h"
 #include "ast.h"
 
+#include <boost/spirit/home/x3/string/symbols.hpp>
 #include <functional>
 
 namespace abacus
 {
-    namespace detail
+    namespace detail::grammar
     {
-        unary_function_symbols::unary_function_symbols() : x3::symbols<unary_function::function>()
+        namespace x3 = boost::spirit::x3;
+
+        unary_function_symbol::unary_function_symbol() : x3::symbols<detail::ast::unary_operation::function>()
         {
             this->add("sin", [](double x) { return std::sin(x); });
             this->add("sinh", [](double x) { return std::sinh(x); });
@@ -43,13 +46,43 @@ namespace abacus
             this->add("log", [](double x) { return std::log(x); });
         }
 
-        binary_function_symbols::binary_function_symbols() : x3::symbols<binary_function::function>()
+        binary_function_symbol::binary_function_symbol() : x3::symbols<detail::ast::binary_operation::function>()
+        {
+            this->add("atan2", [](double a, double b) { return std::atan2(a, b); });
+        }
+
+        additive_symbol::additive_symbol() : x3::symbols<detail::ast::binary_operation::function>()
         {
             this->add("+", std::plus<double>());
-            this->add("/", std::divides<double>());
             this->add("-", std::minus<double>());
-            this->add("*", std::multiplies<double>());
-            this->add("^", [](double a, double b) { return std::pow(a, b); });
         }
+
+        multiplicative_symbol::multiplicative_symbol() : x3::symbols<detail::ast::binary_operation::function>()
+        {
+            this->add("/", std::divides<double>());
+            this->add("*", std::multiplies<double>());
+        }
+
+        power_symbol::power_symbol() : x3::symbols<detail::ast::binary_operation::function>()
+        {
+            this->add("^", [](double a, double b) { return std::pow(a, b);  });
+        }
+    }
+
+    std::expected<detail::ast::operand, std::string> parse(const std::string& input)
+    {
+        auto f = begin(input), l = end(input);
+        detail::ast::operand out;
+        if (phrase_parse(f, l, detail::grammar::expression_rule, boost::spirit::x3::space, out))
+        {
+            return out;
+        }
+
+        if (f != l)
+        {
+            auto error = std::string("Unparsed: \"") + std::string(f, l) + "\"";
+            return std::unexpected(error);
+        }
+        return std::unexpected("");
     }
 }

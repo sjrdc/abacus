@@ -1,55 +1,123 @@
 #pragma once
 /*
-    This file is part of abacus
-    Copyright(C) 2025 Sjoerd Crijns
+	This file is part of abacus
+	Copyright(C) 2025 Sjoerd Crijns
 
-    This program is free software : you can redistribute it and /or modify
-    it under the terms of the GNU General Public License as published by
-    the Free Software Foundation, either version 3 of the License, or
-    (at your option) any later version.
+	This program is free software : you can redistribute it and /or modify
+	it under the terms of the GNU General Public License as published by
+	the Free Software Foundation, either version 3 of the License, or
+	(at your option) any later version.
 
-    This program is distributed in the hope that it will be useful,
-    but WITHOUT ANY WARRANTY; without even the implied warranty of
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.See the
-    GNU General Public License for more details.
+	This program is distributed in the hope that it will be useful,
+	but WITHOUT ANY WARRANTY; without even the implied warranty of
+	MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.See the
+	GNU General Public License for more details.
 
-    You should have received a copy of the GNU General Public License
-    along with this program.If not, see < https://www.gnu.org/licenses/>.
+	You should have received a copy of the GNU General Public License
+	along with this program.If not, see < https://www.gnu.org/licenses/>.
 */
 
-#include "ast.h"
 #include "ast_adapted.h"
 
 #include <boost/spirit/home/x3.hpp>
+
+#include <iomanip>
 #include <expected>
+#include <iostream>
+#include <string>
 
 namespace abacus
 {
-    namespace detail
-    {
-        namespace x3 = boost::spirit::x3;
-        
-        struct unary_function_symbols : x3::symbols<unary_function::function>
-        {
-            unary_function_symbols();
-        };
-
-        struct binary_function_symbols : x3::symbols<binary_function::function>
-        {
-            binary_function_symbols();
-        };
-    }
-
-	template <typename Iterator>
-    std::expected<::abacus::expression, std::string> parse(Iterator begin, Iterator end)
+	namespace detail::grammar
 	{
-        if (false)
-        {
-            return ::abacus::expression();
-        }
-        else
-        {
-            return std::unexpected("Could not parse");
-        }
+		namespace x3 = boost::spirit::x3;
+		struct error_handler
+		{
+			template <typename It, typename Ctx>
+			x3::error_handler_result on_error(It f, It l, x3::expectation_failure<It> const& e, Ctx const& /*ctx*/) const {
+				std::cout << std::string(f, l) << "\n"
+					<< std::setw(1 + std::distance(f, e.where())) << "^"
+					<< "-- expected: " << e.which() << "\n";
+				return x3::error_handler_result::fail;
+			}
+		};
+
+		struct expression_class : error_handler {};
+		struct additive_class : error_handler {};
+		struct multiplicative_class : error_handler {};
+		struct factor_class : error_handler {};
+		struct primary_class : error_handler {};
+		struct unary_class : error_handler {};
+		struct binary_class : error_handler {};
+
+		// Rule declarations
+		const auto expression_rule = x3::rule<expression_class, detail::ast::operand       >{ "expression" };
+		const auto primary_rule = x3::rule<primary_class, detail::ast::operand          >{ "primary" };
+		const auto additive_rule = x3::rule<additive_class, detail::ast::expression      >{ "additive" };
+		const auto multiplicative_rule = x3::rule<multiplicative_class, detail::ast::expression>{ "multiplicative" };
+		const auto factor_rule = x3::rule<factor_class, detail::ast::expression        >{ "factor" };
+		const auto unary_rule = x3::rule<unary_class, detail::ast::unary_operation    >{ "unary" };
+		const auto binary_rule = x3::rule<binary_class, detail::ast::binary_operation  >{ "binary" };
+
+		struct unary_function_symbol : x3::symbols<detail::ast::unary_operation::function>
+		{
+			unary_function_symbol();
+		};
+
+		struct binary_function_symbol : x3::symbols<detail::ast::binary_operation::function>
+		{
+			binary_function_symbol();
+		};
+
+		struct additive_symbol : x3::symbols<detail::ast::binary_operation::function>
+		{
+			additive_symbol();
+		};
+
+		struct multiplicative_symbol : x3::symbols<detail::ast::binary_operation::function>
+		{
+			multiplicative_symbol();
+		};
+
+		struct power_symbol : x3::symbols<detail::ast::binary_operation::function>
+		{
+			power_symbol();
+		};
+
+		// Rule defintions
+		const auto expression_rule_def = additive_rule;
+
+		const auto additive_rule_def =
+			multiplicative_rule >> *(additive_symbol() >> multiplicative_rule);
+
+		const auto multiplicative_rule_def =
+			factor_rule >> *(multiplicative_symbol() >> factor_rule);
+
+		const auto factor_rule_def = primary_rule >> *(power_symbol() >> factor_rule);
+
+		const auto unary_rule_def =
+			unary_function_symbol() >> '(' >> expression_rule >> ')';
+
+		const auto binary_rule_def =
+			binary_function_symbol() >> '(' >> expression_rule >> ',' >> expression_rule >> ')';
+
+		const auto primary_rule_def =
+			x3::double_
+			| ('(' >> expression_rule >> ')')
+			| binary_rule
+			| unary_rule
+			;
+
+		BOOST_SPIRIT_DEFINE(
+			expression_rule,
+			additive_rule,
+			multiplicative_rule,
+			factor_rule,
+			unary_rule,
+			binary_rule,
+			primary_rule
+		)
 	}
+
+	std::expected<detail::ast::operand, std::string> parse(const std::string& input);
 }

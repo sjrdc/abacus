@@ -18,9 +18,9 @@
 */
 
 #include "ast.h"
+#include <boost/fusion/adapted/struct.hpp>
 
-#include <boost/fusion/include/adapt_struct.hpp>
-
-BOOST_FUSION_ADAPT_STRUCT(abacus::unary_function, operation, arg)
-BOOST_FUSION_ADAPT_STRUCT(abacus::binary_function, operation, arg1, arg2)
-BOOST_FUSION_ADAPT_STRUCT(abacus::variable, name, value)
+BOOST_FUSION_ADAPT_STRUCT(abacus::detail::ast::expression, lhs, rhs)
+BOOST_FUSION_ADAPT_STRUCT(abacus::detail::ast::operation, op, rhs)
+BOOST_FUSION_ADAPT_STRUCT(abacus::detail::ast::binary_operation, op, lhs, rhs)
+BOOST_FUSION_ADAPT_STRUCT(abacus::detail::ast::unary_operation, op, rhs)

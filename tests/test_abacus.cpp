@@ -39,14 +39,14 @@ namespace
         arithmetic_parameter("1. - 1.", 0.),
         arithmetic_parameter("2. * 3.", 6.),
         arithmetic_parameter("12. / 3.", 4.),
-        arithmetic_parameter("2. ^ 5.", 64.)
+        arithmetic_parameter("2. ^ 5.", 32.)
     );
 }
 
 TEST_P(ArithmeticTest, can_perform_number_arithmetic)
 {
     auto& p = GetParam();
-    auto parsed = abacus::parse(p.expression.begin(), p.expression.end());
+    auto parsed = abacus::parse(p.expression);
     ASSERT_TRUE(parsed.has_value());
 
     abacus::calculator calculator;

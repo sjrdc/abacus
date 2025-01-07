@@ -17,49 +17,59 @@
 	along with this program.If not, see < https://www.gnu.org/licenses/>.
 */
 
-#include <boost/spirit/home/x3/support/ast/variant.hpp>
-#include <boost/spirit/home/x3/support/ast/position_tagged.hpp>
-#include <boost/variant.hpp>
 
-#include <optional>
-#include <string>
+#include <boost/spirit/home/x3.hpp>
+#include <boost/spirit/home/x3/support/ast/variant.hpp>
+
+#include <functional>
+#include <list>
 
 namespace abacus
 {
-	struct nil {};
-	struct unary_function;
-	struct binary_function;
-	struct variable;
-	
-	namespace x3 = boost::spirit::x3;
-
-	struct expression: public boost::variant<double,
-		nil,
-		x3::forward_ast<unary_function>,
-		x3::forward_ast<binary_function>, 
-		x3::forward_ast<variable>
-	>
+	namespace detail::ast
 	{
-	};
+		namespace x3 = ::boost::spirit::x3;
+		struct nil {};
+		struct unary_operation;
+		struct binary_operation;
+		struct expression;
 
-	struct unary_function
-	{
-		using function = std::function<double(double)>;
-		function operation;
-		expression arg;
-	};
+		struct operand : x3::variant<
+			nil,
+			double,
+			x3::forward_ast<unary_operation>,
+			x3::forward_ast<binary_operation>,
+			x3::forward_ast<expression> >
+		{
+			using base_type::base_type;
+			using base_type::operator=;
+		};
 
-	struct binary_function
-	{
-		using function = std::function<double(double,double)>;
-		function operation;
-		expression arg1;
-		expression arg2;
-	};
+		struct unary_operation
+		{
+			using function = std::function<double(double)>;
+			function op;
+			operand rhs;
+		};
 
-	struct variable
-	{
-		std::string name;
-		std::optional<double> value;
-	};
+		struct binary_operation
+		{
+			using function = std::function<double(double, double)>;
+			function op;
+			operand lhs;
+			operand rhs;
+		};
+
+		struct operation
+		{
+			binary_operation::function op;
+			operand rhs;
+		};
+
+		struct expression
+		{
+			operand lhs;
+			std::list<operation> rhs;
+		};
+	}
 }

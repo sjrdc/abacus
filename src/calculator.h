@@ -24,11 +24,13 @@ namespace abacus
     class calculator
     {
     public:
-        double operator()(expression&);
-    private:
-        double operator()(nil&);
-        double operator()(binary_function&);
-        double operator()(unary_function&);
-        double operator()(variable&);
+        using result_type = double;
+
+        double operator()(detail::ast::nil&);
+        double operator()(double);
+        double operator()(detail::ast::unary_operation&);
+        double operator()(detail::ast::binary_operation&);
+        double operator()(detail::ast::expression&);
+        double operator()(detail::ast::operand&);
     };
 }
