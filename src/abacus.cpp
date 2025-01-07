@@ -38,7 +38,7 @@ namespace abacus
             this->add("cosh", [](double x) { return std::cosh(x); });
             this->add("acos", [](double x) { return std::acos(x); });
             this->add("acosh", [](double x) { return std::acosh(x); });
-            this->add("tan", [](double x) { return std::sin(x); });
+            this->add("tan", [](double x) { return std::tan(x); });
             this->add("tanh", [](double x) { return std::tanh(x); });
             this->add("atan", [](double x) { return std::atan(x); });
             this->add("log10", [](double x) { return std::log10(x); });
