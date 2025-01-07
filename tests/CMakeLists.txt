@@ -21,4 +21,5 @@ gtest_discover_tests(test_abacus
   DISCOVERY_TIMEOUT  # how long to wait (in seconds) before crashing
   10
   )
-  
+ 
+  add_test(NAME test_abacus COMMAND test_abacus)
