@@ -42,23 +42,6 @@ namespace abacus
 			}
 		};
 
-		struct expression_class : error_handler {};
-		struct additive_class : error_handler {};
-		struct multiplicative_class : error_handler {};
-		struct factor_class : error_handler {};
-		struct primary_class : error_handler {};
-		struct unary_class : error_handler {};
-		struct binary_class : error_handler {};
-
-		// Rule declarations
-		const auto expression_rule = x3::rule<expression_class, detail::ast::operand       >{ "expression" };
-		const auto primary_rule = x3::rule<primary_class, detail::ast::operand          >{ "primary" };
-		const auto additive_rule = x3::rule<additive_class, detail::ast::expression      >{ "additive" };
-		const auto multiplicative_rule = x3::rule<multiplicative_class, detail::ast::expression>{ "multiplicative" };
-		const auto factor_rule = x3::rule<factor_class, detail::ast::expression        >{ "factor" };
-		const auto unary_rule = x3::rule<unary_class, detail::ast::unary_operation    >{ "unary" };
-		const auto binary_rule = x3::rule<binary_class, detail::ast::binary_operation  >{ "binary" };
-
 		struct unary_function_symbol : x3::symbols<detail::ast::unary_operation::function>
 		{
 			unary_function_symbol();
@@ -83,40 +66,6 @@ namespace abacus
 		{
 			power_symbol();
 		};
-
-		// Rule defintions
-		const auto expression_rule_def = additive_rule;
-
-		const auto additive_rule_def =
-			multiplicative_rule >> *(additive_symbol() >> multiplicative_rule);
-
-		const auto multiplicative_rule_def =
-			factor_rule >> *(multiplicative_symbol() >> factor_rule);
-
-		const auto factor_rule_def = primary_rule >> *(power_symbol() >> factor_rule);
-
-		const auto unary_rule_def =
-			unary_function_symbol() >> '(' >> expression_rule >> ')';
-
-		const auto binary_rule_def =
-			binary_function_symbol() >> '(' >> expression_rule >> ',' >> expression_rule >> ')';
-
-		const auto primary_rule_def =
-			x3::double_
-			| ('(' >> expression_rule >> ')')
-			| binary_rule
-			| unary_rule
-			;
-
-		BOOST_SPIRIT_DEFINE(
-			expression_rule,
-			additive_rule,
-			multiplicative_rule,
-			factor_rule,
-			unary_rule,
-			binary_rule,
-			primary_rule
-		)
 	}
 
 	std::expected<detail::ast::operand, std::string> parse(const std::string& input);
