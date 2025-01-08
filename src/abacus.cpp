@@ -28,7 +28,7 @@ namespace abacus
     {
         namespace x3 = boost::spirit::x3;
 
-        unary_function_symbol::unary_function_symbol() : x3::symbols<detail::ast::unary_operation::function>()
+        unary_function_symbol::unary_function_symbol()
         {
             this->add("sin", [](double x) { return std::sin(x); });
             this->add("sinh", [](double x) { return std::sinh(x); });
@@ -47,26 +47,26 @@ namespace abacus
             this->add("abs", [](double x) { return std::abs(x); });
         }
 
-        binary_function_symbol::binary_function_symbol() : x3::symbols<detail::ast::binary_operation::function>()
+        binary_function_symbol::binary_function_symbol()
         {
             this->add("atan2", [](double a, double b) { return std::atan2(a, b); });
             this->add("min", [](double a, double b) { return std::min(a, b); });
             this->add("max", [](double a, double b) { return std::max(a, b); });
         }
 
-        additive_symbol::additive_symbol() : x3::symbols<detail::ast::binary_operation::function>()
+        additive_symbol::additive_symbol()
         {
             this->add("+", std::plus<double>());
             this->add("-", std::minus<double>());
         }
 
-        multiplicative_symbol::multiplicative_symbol() : x3::symbols<detail::ast::binary_operation::function>()
+        multiplicative_symbol::multiplicative_symbol()
         {
             this->add("/", std::divides<double>());
             this->add("*", std::multiplies<double>());
         }
 
-        power_symbol::power_symbol() : x3::symbols<detail::ast::binary_operation::function>()
+        power_symbol::power_symbol()
         {
             this->add("^", [](double a, double b) { return std::pow(a, b);  });
         }
@@ -81,13 +81,13 @@ namespace abacus
         struct binary_class : error_handler {};
 
         // Rule declarations
-        const auto expression_rule = x3::rule<expression_class, detail::ast::operand       >{ "expression" };
-        const auto primary_rule = x3::rule<primary_class, detail::ast::operand          >{ "primary" };
-        const auto additive_rule = x3::rule<additive_class, detail::ast::expression      >{ "additive" };
-        const auto multiplicative_rule = x3::rule<multiplicative_class, detail::ast::expression>{ "multiplicative" };
-        const auto factor_rule = x3::rule<factor_class, detail::ast::expression        >{ "factor" };
-        const auto unary_rule = x3::rule<unary_class, detail::ast::unary_operation    >{ "unary" };
-        const auto binary_rule = x3::rule<binary_class, detail::ast::binary_operation  >{ "binary" };
+        const auto expression_rule = x3::rule<expression_class, ast::operand       >{ "expression" };
+        const auto primary_rule = x3::rule<primary_class, ast::operand          >{ "primary" };
+        const auto additive_rule = x3::rule<additive_class, ast::expression      >{ "additive" };
+        const auto multiplicative_rule = x3::rule<multiplicative_class, ast::expression>{ "multiplicative" };
+        const auto factor_rule = x3::rule<factor_class, ast::expression        >{ "factor" };
+        const auto unary_rule = x3::rule<unary_class, ast::unary_operation    >{ "unary" };
+        const auto binary_rule = x3::rule<binary_class, ast::binary_operation  >{ "binary" };
 
         // Rule defintions
         const auto expression_rule_def = additive_rule;
@@ -124,10 +124,10 @@ namespace abacus
         )
     }
 
-    std::expected<detail::ast::operand, std::string> parse(const std::string& input)
+    std::expected<operand, std::string> parse(const std::string& input)
     {
         auto f = begin(input), l = end(input);
-        detail::ast::operand out;
+        operand out;
         if (phrase_parse(f, l, detail::grammar::expression_rule, boost::spirit::x3::space, out))
         {
             return out;

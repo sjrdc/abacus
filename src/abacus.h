@@ -42,31 +42,32 @@ namespace abacus
 			}
 		};
 
-		struct unary_function_symbol : x3::symbols<detail::ast::unary_operation::function>
+		struct unary_function_symbol : x3::symbols<ast::unary_operation::function>
 		{
 			unary_function_symbol();
 		};
 
-		struct binary_function_symbol : x3::symbols<detail::ast::binary_operation::function>
+		struct binary_function_symbol : x3::symbols<ast::binary_operation::function>
 		{
 			binary_function_symbol();
 		};
 
-		struct additive_symbol : x3::symbols<detail::ast::binary_operation::function>
+		struct additive_symbol : x3::symbols<ast::binary_operation::function>
 		{
 			additive_symbol();
 		};
 
-		struct multiplicative_symbol : x3::symbols<detail::ast::binary_operation::function>
+		struct multiplicative_symbol : x3::symbols<ast::binary_operation::function>
 		{
 			multiplicative_symbol();
 		};
 
-		struct power_symbol : x3::symbols<detail::ast::binary_operation::function>
+		struct power_symbol : x3::symbols<ast::binary_operation::function>
 		{
 			power_symbol();
 		};
 	}
 
-	std::expected<detail::ast::operand, std::string> parse(const std::string& input);
+	using operand = detail::ast::operand;
+	std::expected<operand, std::string> parse(const std::string& input);
 }
