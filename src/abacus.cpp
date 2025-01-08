@@ -1,19 +1,19 @@
 /*
-    This file is part of abacus
-    Copyright(C) 2025 Sjoerd Crijns
+ This file is part of abacus
+ Copyright(C) 2025 Sjoerd Crijns
 
-    This program is free software : you can redistribute it and /or modify
-    it under the terms of the GNU General Public License as published by
-    the Free Software Foundation, either version 3 of the License, or
-    (at your option) any later version.
+ This program is free software : you can redistribute it and /or modify
+ it under the terms of the GNU General Public License as published by
+ the Free Software Foundation, either version 3 of the License, or
+ (at your option) any later version.
 
-    This program is distributed in the hope that it will be useful,
-    but WITHOUT ANY WARRANTY; without even the implied warranty of
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.See the
-    GNU General Public License for more details.
+ This program is distributed in the hope that it will be useful,
+ but WITHOUT ANY WARRANTY; without even the implied warranty of
+ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.See the
+ GNU General Public License for more details.
 
-    You should have received a copy of the GNU General Public License
-    along with this program.If not, see < https://www.gnu.org/licenses/>.
+ You should have received a copy of the GNU General Public License
+ along with this program.If not, see < https://www.gnu.org/licenses/>.
 */
 
 #include "abacus.h"
@@ -68,7 +68,7 @@ namespace abacus
 
         power_symbol::power_symbol()
         {
-            this->add("^", [](double a, double b) { return std::pow(a, b);  });
+            this->add("^", [](double a, double b) { return std::pow(a, b); });
         }
 
 
@@ -81,13 +81,13 @@ namespace abacus
         struct binary_class : error_handler {};
 
         // Rule declarations
-        const auto expression_rule = x3::rule<expression_class, ast::operand       >{ "expression" };
-        const auto primary_rule = x3::rule<primary_class, ast::operand          >{ "primary" };
-        const auto additive_rule = x3::rule<additive_class, ast::expression      >{ "additive" };
+        const auto expression_rule = x3::rule<expression_class, ast::operand >{ "expression" };
+        const auto primary_rule = x3::rule<primary_class, ast::operand >{ "primary" };
+        const auto additive_rule = x3::rule<additive_class, ast::expression >{ "additive" };
         const auto multiplicative_rule = x3::rule<multiplicative_class, ast::expression>{ "multiplicative" };
-        const auto factor_rule = x3::rule<factor_class, ast::expression        >{ "factor" };
-        const auto unary_rule = x3::rule<unary_class, ast::unary_operation    >{ "unary" };
-        const auto binary_rule = x3::rule<binary_class, ast::binary_operation  >{ "binary" };
+        const auto factor_rule = x3::rule<factor_class, ast::expression >{ "factor" };
+        const auto unary_rule = x3::rule<unary_class, ast::unary_operation >{ "unary" };
+        const auto binary_rule = x3::rule<binary_class, ast::binary_operation >{ "binary" };
 
         // Rule defintions
         const auto expression_rule_def = additive_rule;
