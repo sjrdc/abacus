@@ -30,45 +30,50 @@ namespace abacus
 
         unary_function_symbol::unary_function_symbol()
         {
-            this->add("sin", [](double x) { return std::sin(x); });
-            this->add("sinh", [](double x) { return std::sinh(x); });
-            this->add("asin", [](double x) { return std::asin(x); });
-            this->add("asinh", [](double x) { return std::asinh(x); });
-            this->add("cos", [](double x) { return std::cos(x); });
-            this->add("cosh", [](double x) { return std::cosh(x); });
-            this->add("acos", [](double x) { return std::acos(x); });
-            this->add("acosh", [](double x) { return std::acosh(x); });
-            this->add("tan", [](double x) { return std::tan(x); });
-            this->add("tanh", [](double x) { return std::tanh(x); });
-            this->add("atan", [](double x) { return std::atan(x); });
-            this->add("log10", [](double x) { return std::log10(x); });
-            this->add("log2", [](double x) { return std::log2(x); });
-            this->add("log", [](double x) { return std::log(x); });
-            this->add("abs", [](double x) { return std::abs(x); });
+            add
+                ("sin", [](double x) { return std::sin(x); })
+                ("sinh", [](double x) { return std::sinh(x); })
+                ("asin", [](double x) { return std::asin(x); })
+                ("asinh", [](double x) { return std::asinh(x); })
+                ("cos", [](double x) { return std::cos(x); })
+                ("cosh", [](double x) { return std::cosh(x); })
+                ("acos", [](double x) { return std::acos(x); })
+                ("acosh", [](double x) { return std::acosh(x); })
+                ("tan", [](double x) { return std::tan(x); })
+                ("tanh", [](double x) { return std::tanh(x); })
+                ("atan", [](double x) { return std::atan(x); })
+                ("log10", [](double x) { return std::log10(x); })
+                ("log2", [](double x) { return std::log2(x); })
+                ("log", [](double x) { return std::log(x); })
+                ("abs", [](double x) { return std::abs(x); });
         }
 
         binary_function_symbol::binary_function_symbol()
         {
-            this->add("atan2", [](double a, double b) { return std::atan2(a, b); });
-            this->add("min", [](double a, double b) { return std::min(a, b); });
-            this->add("max", [](double a, double b) { return std::max(a, b); });
+            add
+                ("atan2", [](double a, double b) { return std::atan2(a, b); })
+                ("min", [](double a, double b) { return std::min(a, b); })
+                ("max", [](double a, double b) { return std::max(a, b); });
         }
 
         additive_symbol::additive_symbol()
         {
-            this->add("+", std::plus<double>());
-            this->add("-", std::minus<double>());
+            add
+                ("+", std::plus<double>())
+                ("-", std::minus<double>());
         }
 
         multiplicative_symbol::multiplicative_symbol()
         {
-            this->add("/", std::divides<double>());
-            this->add("*", std::multiplies<double>());
+            add
+                ("/", std::divides<double>())
+                ("*", std::multiplies<double>());
         }
 
         power_symbol::power_symbol()
         {
-            this->add("^", [](double a, double b) { return std::pow(a, b); });
+            add
+                ("^", [](double a, double b) { return std::pow(a, b); });
         }
 
 
@@ -83,23 +88,23 @@ namespace abacus
         struct identifier_class : error_handler {};
 
         // Rule declarations
-        const auto expression_rule = x3::rule<expression_class, ast::operand >{ "expression" };
-        const auto primary_rule = x3::rule<primary_class, ast::operand >{ "primary" };
-        const auto additive_rule = x3::rule<additive_class, ast::expression >{ "additive" };
-        const auto multiplicative_rule = x3::rule<multiplicative_class, ast::expression>{ "multiplicative" };
-        const auto factor_rule = x3::rule<factor_class, ast::expression >{ "factor" };
-        const auto unary_rule = x3::rule<unary_class, ast::unary_operation >{ "unary" };
-        const auto binary_rule = x3::rule<binary_class, ast::binary_operation >{ "binary" };
-        const auto variable_rule = x3::rule<variable_class, ast::variable >{ "variable" };
-        const auto identifier_rule = x3::rule<identifier_class, std::string>{ "identifier" };
+        constexpr auto expression_rule = x3::rule<expression_class, ast::operand >{ "expression" };
+        constexpr auto primary_rule = x3::rule<primary_class, ast::operand >{ "primary" };
+        constexpr auto additive_rule = x3::rule<additive_class, ast::expression >{ "additive" };
+        constexpr auto multiplicative_rule = x3::rule<multiplicative_class, ast::expression>{ "multiplicative" };
+        constexpr auto factor_rule = x3::rule<factor_class, ast::expression >{ "factor" };
+        constexpr auto unary_rule = x3::rule<unary_class, ast::unary_operation >{ "unary" };
+        constexpr auto binary_rule = x3::rule<binary_class, ast::binary_operation >{ "binary" };
+        constexpr auto variable_rule = x3::rule<variable_class, ast::variable >{ "variable" };
+        constexpr auto identifier_rule = x3::rule<identifier_class, std::string>{ "identifier" };
 
-        // Rule defintions
-        const auto expression_rule_def = additive_rule;
+        // Rule definitions
+        constexpr auto expression_rule_def = additive_rule;
 
         const auto additive_rule_def =
             multiplicative_rule >> *(additive_symbol() >> multiplicative_rule);
 
-        const auto multiplicative_rule_def =
+        const auto multiplicative_rule_def = 
             factor_rule >> *(multiplicative_symbol() >> factor_rule);
 
         const auto factor_rule_def = primary_rule >> *(power_symbol() >> factor_rule);
@@ -116,7 +121,7 @@ namespace abacus
             };
 
         constexpr auto underscore = x3::char_('_');
-        const auto identifier_rule_def = x3::lexeme[(x3::alpha | underscore) >> *(x3::alnum | underscore)];
+        constexpr auto identifier_rule_def = x3::lexeme[(x3::alpha | underscore) >> *(x3::alnum | underscore)];
         const auto variable_rule_def = (identifier_rule)[make_variable];
 
         const auto primary_rule_def =
