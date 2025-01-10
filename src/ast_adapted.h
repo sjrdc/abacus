@@ -21,6 +21,7 @@
 #include <boost/fusion/adapted/struct.hpp>
 
 BOOST_FUSION_ADAPT_STRUCT(abacus::detail::ast::expression, lhs, rhs)
-BOOST_FUSION_ADAPT_STRUCT(abacus::detail::ast::operation, op, rhs)
 BOOST_FUSION_ADAPT_STRUCT(abacus::detail::ast::binary_operation, op, lhs, rhs)
+BOOST_FUSION_ADAPT_STRUCT(abacus::detail::ast::operation, op, rhs)
 BOOST_FUSION_ADAPT_STRUCT(abacus::detail::ast::unary_operation, op, rhs)
+BOOST_FUSION_ADAPT_STRUCT(abacus::detail::ast::variable, name, value)

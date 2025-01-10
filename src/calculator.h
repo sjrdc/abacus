@@ -26,11 +26,12 @@ namespace abacus
     public:
         using result_type = double;
 
-        double operator()(detail::ast::nil&);
-        double operator()(double);
-        double operator()(detail::ast::unary_operation&);
-        double operator()(detail::ast::binary_operation&);
-        double operator()(detail::ast::expression&);
-        double operator()(detail::ast::operand&);
+        double operator()(detail::ast::binary_operation&) const;
+        double operator()(double) const;
+        double operator()(detail::ast::expression&) const;
+        double operator()(detail::ast::nil&) const;
+        double operator()(detail::ast::operand&) const;
+        double operator()(detail::ast::unary_operation&) const;
+        double operator()(detail::ast::variable&) const;
     };
 }

@@ -32,16 +32,24 @@ namespace abacus
 		struct unary_operation;
 		struct binary_operation;
 		struct expression;
+		struct variable;
 
 		struct operand : x3::variant<
 			nil,
 			double,
 			x3::forward_ast<unary_operation>,
 			x3::forward_ast<binary_operation>,
-			x3::forward_ast<expression> >
+			x3::forward_ast<expression>,
+			x3::forward_ast<variable> >
 		{
 			using base_type::base_type;
 			using base_type::operator=;
+		};
+
+		struct variable
+		{
+			std::string name;
+			std::optional<operand> value;
 		};
 
 		struct unary_operation
