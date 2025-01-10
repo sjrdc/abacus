@@ -79,6 +79,7 @@ namespace abacus
         struct primary_class : error_handler {};
         struct unary_class : error_handler {};
         struct binary_class : error_handler {};
+        struct variable_class : error_handler {};
 
         // Rule declarations
         const auto expression_rule = x3::rule<expression_class, ast::operand >{ "expression" };
@@ -88,6 +89,7 @@ namespace abacus
         const auto factor_rule = x3::rule<factor_class, ast::expression >{ "factor" };
         const auto unary_rule = x3::rule<unary_class, ast::unary_operation >{ "unary" };
         const auto binary_rule = x3::rule<binary_class, ast::binary_operation >{ "binary" };
+        const auto variable_rule = x3::rule<variable_class, ast::variable >{ "variable" };
 
         // Rule defintions
         const auto expression_rule_def = additive_rule;
@@ -106,11 +108,20 @@ namespace abacus
         const auto binary_rule_def =
             binary_function_symbol() >> '(' >> expression_rule >> ',' >> expression_rule >> ')';
 
+        constexpr auto make_variable = [](auto& context)
+            {
+                return ast::variable{ "piet" };
+            };
+
+        constexpr auto variable_rule_def =
+            (x3::lexeme[(*x3::alnum | x3::char_('_'))])[make_variable];
+
         const auto primary_rule_def =
             x3::double_
             | ('(' >> expression_rule >> ')')
             | binary_rule
             | unary_rule
+            | variable_rule
             ;
 
         BOOST_SPIRIT_DEFINE(
@@ -120,6 +131,7 @@ namespace abacus
             factor_rule,
             unary_rule,
             binary_rule,
+            variable_rule,
             primary_rule
         )
     }

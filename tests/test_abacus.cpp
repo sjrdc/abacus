@@ -80,3 +80,15 @@ TEST_P(ParseAndCheck, can_parse_and_calculate)
 }
 
 INSTANTIATE_TEST_SUITE_P(ArithmeticTest,ParseAndCheck, number_arithmetic_test_values);
+
+TEST(abacus, can_parse_variable)
+{
+	auto parsed = abacus::parse("x_1");
+	EXPECT_TRUE(parsed.has_value());
+
+	parsed = abacus::parse("_x1");
+	EXPECT_TRUE(parsed.has_value());
+
+    parsed = abacus::parse("1_x");
+	EXPECT_FALSE(parsed.has_value());
+}
