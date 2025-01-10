@@ -112,8 +112,7 @@ namespace abacus
 
         constexpr auto make_variable = [](auto& context)
             {
-                auto name = std::string(x3::_attr(context));
-                return ast::variable{ name };
+                return ast::variable{ x3::_attr(context) };
             };
 
         constexpr auto underscore = x3::char_('_');
