@@ -25,12 +25,12 @@ namespace abacus
         return d;
     }
 
-    calculator::result_type calculator::operator()(detail::ast::nil&) const
+    calculator::result_type calculator::operator()(const detail::ast::nil&) const
     {
         throw std::runtime_error("operation not implemented");
     }
 
-    calculator::result_type calculator::operator()(detail::ast::expression& e) const
+    calculator::result_type calculator::operator()(const detail::ast::expression& e) const
     {
         auto r = e.lhs.apply_visitor(*this);
         for (auto& o : e.rhs)
@@ -40,25 +40,26 @@ namespace abacus
         return r;
     }
 
-    calculator::result_type calculator::operator()(detail::ast::binary_operation& f) const
+    calculator::result_type calculator::operator()(const detail::ast::binary_operation& f) const
     {
         return f.op(f.lhs.apply_visitor(*this), f.rhs.apply_visitor(*this));
     }
     
-    calculator::result_type calculator::operator()(detail::ast::unary_operation& f) const
+    calculator::result_type calculator::operator()(const detail::ast::unary_operation& f) const
     {
         return f.op(f.rhs.apply_visitor(*this));
     }
 
-    calculator::result_type calculator::operator()(detail::ast::operand& o) const
+    calculator::result_type calculator::operator()(const detail::ast::operand& o) const
     {
         return o.apply_visitor(*this);
     }
 
-    double calculator::operator()(detail::ast::variable& v) const
+    double calculator::operator()(const detail::ast::ASTVariableType& v) const
     {
-        if (v.value) return v.value->apply_visitor(*this);
+
+        if (v->value) return v->value->apply_visitor(*this);
         throw std::runtime_error("Error evaluating variable '"
-            + v.name + "' with no assigned value.");
+            + v->name + "' with no assigned value.");
     }
 }

@@ -95,7 +95,7 @@ namespace abacus
         constexpr auto factor_rule = x3::rule<factor_class, ast::expression >{ "factor" };
         constexpr auto unary_rule = x3::rule<unary_class, ast::unary_operation >{ "unary" };
         constexpr auto binary_rule = x3::rule<binary_class, ast::binary_operation >{ "binary" };
-        constexpr auto variable_rule = x3::rule<variable_class, ast::variable >{ "variable" };
+        constexpr auto variable_rule = x3::rule<variable_class, ast::ASTVariableType >{ "variable" };
         constexpr auto identifier_rule = x3::rule<identifier_class, std::string>{ "identifier" };
 
         // Rule definitions
@@ -117,7 +117,9 @@ namespace abacus
 
         constexpr auto make_variable = [](auto& context)
             {
-                return ast::variable{ x3::_attr(context) };
+                const auto variable = std::make_shared<ast::variable>();
+                variable->name = x3::_attr(context);
+                return variable;
             };
 
         constexpr auto underscore = x3::char_('_');

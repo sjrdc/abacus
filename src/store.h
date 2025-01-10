@@ -18,20 +18,20 @@
 */
 
 #include "ast.h"
+#include <unordered_map>
 
 namespace abacus
 {
-    class calculator
+    class variable_store
     {
     public:
-        using result_type = double;
+        using store_type = std::unordered_map<std::string, std::shared_ptr<detail::ast::variable>>;
+        using value_type = store_type::mapped_type;
+        using key_type = store_type::key_type;
 
-        double operator()(const detail::ast::binary_operation&) const;
-        double operator()(double) const;
-        double operator()(const detail::ast::expression&) const;
-        double operator()(const detail::ast::nil&) const;
-        double operator()(const detail::ast::operand&) const;
-        double operator()(const detail::ast::unary_operation&) const;
-        double operator()(const detail::ast::ASTVariableType&) const;
+        value_type get(const key_type&);
+
+    private:
+        std::unordered_map<std::string, value_type> variables;
     };
 }

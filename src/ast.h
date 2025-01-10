@@ -22,7 +22,7 @@
 
 #include <functional>
 #include <list>
-
+#include <memory>
 namespace abacus
 {
 	namespace detail::ast
@@ -34,13 +34,15 @@ namespace abacus
 		struct expression;
 		struct variable;
 
+		using ASTVariableType = std::shared_ptr<variable>;
+
 		struct operand : x3::variant<
 			nil,
 			double,
 			x3::forward_ast<unary_operation>,
 			x3::forward_ast<binary_operation>,
 			x3::forward_ast<expression>,
-			x3::forward_ast<variable> >
+			x3::forward_ast<ASTVariableType> >
 		{
 			using base_type::base_type;
 			using base_type::operator=;
