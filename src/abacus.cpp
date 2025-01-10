@@ -80,6 +80,7 @@ namespace abacus
         struct unary_class : error_handler {};
         struct binary_class : error_handler {};
         struct variable_class : error_handler {};
+        struct identifier_class : error_handler {};
 
         // Rule declarations
         const auto expression_rule = x3::rule<expression_class, ast::operand >{ "expression" };
@@ -90,6 +91,7 @@ namespace abacus
         const auto unary_rule = x3::rule<unary_class, ast::unary_operation >{ "unary" };
         const auto binary_rule = x3::rule<binary_class, ast::binary_operation >{ "binary" };
         const auto variable_rule = x3::rule<variable_class, ast::variable >{ "variable" };
+        const auto identifier_rule = x3::rule<identifier_class, std::string>{ "identifier" };
 
         // Rule defintions
         const auto expression_rule_def = additive_rule;
@@ -110,11 +112,13 @@ namespace abacus
 
         constexpr auto make_variable = [](auto& context)
             {
-                return ast::variable{ "piet" };
+                auto name = std::string(x3::_attr(context));
+                return ast::variable{ name };
             };
 
-        constexpr auto variable_rule_def =
-            (x3::lexeme[(*x3::alnum | x3::char_('_'))])[make_variable];
+        constexpr auto underscore = x3::char_('_');
+        const auto identifier_rule_def = x3::lexeme[(x3::alpha | underscore) >> *(x3::alnum | underscore)];
+        const auto variable_rule_def = (identifier_rule)[make_variable];
 
         const auto primary_rule_def =
             x3::double_
@@ -131,6 +135,7 @@ namespace abacus
             factor_rule,
             unary_rule,
             binary_rule,
+            identifier_rule,
             variable_rule,
             primary_rule
         )
@@ -142,13 +147,13 @@ namespace abacus
         operand out;
         if (phrase_parse(f, l, detail::grammar::expression_rule, boost::spirit::x3::space, out))
         {
-            return out;
-        }
+            if (f != l)
+            {
+                auto error = std::string("Unparsed: \"") + std::string(f, l) + "\"";
+                return std::unexpected(error);
+            }
 
-        if (f != l)
-        {
-            auto error = std::string("Unparsed: \"") + std::string(f, l) + "\"";
-            return std::unexpected(error);
+            return out;
         }
         return std::unexpected("");
     }

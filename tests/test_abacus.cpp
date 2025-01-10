@@ -18,7 +18,6 @@
 
 #include "abacus.h"
 #include "calculator.h"
-
 #include <gtest/gtest.h>
 
 
@@ -69,7 +68,7 @@ void parse_and_check(const std::string& expression, double value)
 	auto parsed = abacus::parse(expression);
 	ASSERT_TRUE(parsed.has_value());
 
-	abacus::calculator calculator;
+    const abacus::calculator calculator;
 	EXPECT_DOUBLE_EQ(calculator(parsed.value()), value);
 }
 
@@ -81,14 +80,28 @@ TEST_P(ParseAndCheck, can_parse_and_calculate)
 
 INSTANTIATE_TEST_SUITE_P(ArithmeticTest,ParseAndCheck, number_arithmetic_test_values);
 
-TEST(abacus, can_parse_variable)
+
+TEST(abacus, can_parse_variable_name)
 {
-	auto parsed = abacus::parse("x_1");
-	EXPECT_TRUE(parsed.has_value());
+	EXPECT_TRUE(abacus::parse("xsdf").has_value());
+}
 
-	parsed = abacus::parse("_x1");
-	EXPECT_TRUE(parsed.has_value());
+TEST(abacus, can_parse_variable_name_with_underscore)
+{
+	EXPECT_TRUE(abacus::parse("xsdf_").has_value());
+}
 
-    parsed = abacus::parse("1_x");
-	EXPECT_FALSE(parsed.has_value());
+TEST(abacus, can_parse_variable_name_with_digit)
+{
+	EXPECT_TRUE(abacus::parse("xs112354df_").has_value());
+}
+
+TEST(abacus, can_parse_variable_name_starting_with_underscore)
+{
+	EXPECT_TRUE(abacus::parse("_xsdf_").has_value());
+}
+
+TEST(abacus, cannot_parse_variable_name_starting_with_digit)
+{
+    EXPECT_FALSE(abacus::parse("1xsdf_").has_value());
 }
