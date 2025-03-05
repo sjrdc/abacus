@@ -23,6 +23,7 @@
 #include <functional>
 #include <list>
 #include <memory>
+
 namespace abacus
 {
 	namespace detail::ast
