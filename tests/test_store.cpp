@@ -22,6 +22,8 @@
 
 #include <gtest/gtest.h>
 
+#include <numbers>
+
 using namespace abacus;
 
 namespace
