@@ -21,7 +21,8 @@
 #include <gtest/gtest.h>
 
 
-#define MAKE_TEST_VALUE(VAR) test_parameter(#VAR, std::VAR)
+#define MAKE_TEST_VALUE(VAR) test_parameter(#VAR, VAR)
+#define MAKE_TEST_VALUE_FROM_STD_FUNCTION(VAR) test_parameter(#VAR, std::VAR)
 
 namespace
 {
@@ -37,29 +38,29 @@ namespace
 	};
 
 	auto number_arithmetic_test_values = testing::Values<test_parameter>(
-		test_parameter("1. + 1.", 2.),
-		MAKE_TEST_VALUE(abs(1. + 1 + 1. + 2)),
-		test_parameter("1. - 1.", 0.),
-		test_parameter("2. * 3.", 6.),
-		test_parameter("12. / 3.", 4.),
+		MAKE_TEST_VALUE((1. + 1.)),
+		MAKE_TEST_VALUE_FROM_STD_FUNCTION(abs(1. + 1 + 1. + 2)),
+		MAKE_TEST_VALUE((1. - 1.)),
+		MAKE_TEST_VALUE((2. * 3.)),
+		MAKE_TEST_VALUE((12. / 3.)),
 		test_parameter("2. ^ 5.", 32.),
-		MAKE_TEST_VALUE(sin(1.)),
-		MAKE_TEST_VALUE(sinh(2.)),
-		MAKE_TEST_VALUE(asin(1.)),
-		MAKE_TEST_VALUE(asinh(4.)),
-		MAKE_TEST_VALUE(cos(5.)),
-		MAKE_TEST_VALUE(cosh(6.)),
-		MAKE_TEST_VALUE(acos(1.)),
-		MAKE_TEST_VALUE(acosh(8.)),
-		MAKE_TEST_VALUE(tan(1.)),
-		MAKE_TEST_VALUE(tanh(1.)),
-		MAKE_TEST_VALUE(atan(1.)),
-		MAKE_TEST_VALUE(log10(1.)),
-		MAKE_TEST_VALUE(log2(1.)),
-		MAKE_TEST_VALUE(log(1.)),
-		MAKE_TEST_VALUE(abs(-1.)),
-		MAKE_TEST_VALUE(min(-1., 5.)),
-		MAKE_TEST_VALUE(max(-1., 5.))
+		MAKE_TEST_VALUE_FROM_STD_FUNCTION(sin(1.)),
+		MAKE_TEST_VALUE_FROM_STD_FUNCTION(sinh(2.)),
+		MAKE_TEST_VALUE_FROM_STD_FUNCTION(asin(1.)),
+		MAKE_TEST_VALUE_FROM_STD_FUNCTION(asinh(4.)),
+		MAKE_TEST_VALUE_FROM_STD_FUNCTION(cos(5.)),
+		MAKE_TEST_VALUE_FROM_STD_FUNCTION(cosh(6.)),
+		MAKE_TEST_VALUE_FROM_STD_FUNCTION(acos(1.)),
+		MAKE_TEST_VALUE_FROM_STD_FUNCTION(acosh(8.)),
+		MAKE_TEST_VALUE_FROM_STD_FUNCTION(tan(1.)),
+		MAKE_TEST_VALUE_FROM_STD_FUNCTION(tanh(1.)),
+		MAKE_TEST_VALUE_FROM_STD_FUNCTION(atan(1.)),
+		MAKE_TEST_VALUE_FROM_STD_FUNCTION(log10(1.)),
+		MAKE_TEST_VALUE_FROM_STD_FUNCTION(log2(1.)),
+		MAKE_TEST_VALUE_FROM_STD_FUNCTION(log(1.)),
+		MAKE_TEST_VALUE_FROM_STD_FUNCTION(abs(-1.)),
+		MAKE_TEST_VALUE_FROM_STD_FUNCTION(min(-1., 5.)),
+		MAKE_TEST_VALUE_FROM_STD_FUNCTION(max(-1., 5.))
 	);
 }
 
@@ -104,4 +105,9 @@ TEST(abacus, can_parse_variable_name_starting_with_underscore)
 TEST(abacus, cannot_parse_variable_name_starting_with_digit)
 {
     EXPECT_FALSE(abacus::parse("1xsdf_").has_value());
+}
+
+TEST(abacus, can_parse_variable_name_starting_with_function_name)
+{
+    EXPECT_TRUE(abacus::parse("sin1xsdf_").has_value());
 }
