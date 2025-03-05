@@ -17,6 +17,7 @@
 */
 
 #include "abacus.h"
+#include "calculator.h"
 #include "store.h"
 
 #include <gtest/gtest.h>
@@ -37,9 +38,22 @@ TEST(store, can_store_variable)
 TEST(store, retrieves_stored_variable)
 {
 	variable_store store;
-	variable_store::value_type::element_type* raw_ptr;
-	{
-		raw_ptr = store.get(varname).get();
-	} // var goes out of scope
+	auto* raw_ptr = store.get(varname).get();
 	EXPECT_EQ(raw_ptr, store.get(varname).get());
+}
+
+TEST(store, preserves_variable_values)
+{
+	// given a store containing a variable
+	variable_store store;
+	const auto value = std::numbers::pi;
+	{
+		// when the variable is given a value but it goes out of scope
+		auto variable = store.get(varname);
+		variable->value = value;
+	}
+
+	// the store retains the variable and its value
+	calculator calc;
+	EXPECT_EQ(calc(store.get(varname)), value);
 }
