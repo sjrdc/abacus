@@ -25,7 +25,6 @@ namespace abacus
         static_assert(std::is_same_v<value_type, std::shared_ptr<detail::ast::variable>>, 
             "this code is written with the assumption of storing shared ptrs in the store");
 
-
         auto iterator = variables.find(name);
         if (iterator == variables.cend())
         {

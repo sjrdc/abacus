@@ -28,50 +28,28 @@ namespace abacus
 
     calculator::result_type calculator::operator()(const detail::ast::nil&) const
     {
-        return std::unexpected("operation not implemented");
+        throw std::runtime_error("operation not implemented");
     }
 
     calculator::result_type calculator::operator()(const detail::ast::expression& e) const
     {
         auto r = e.lhs.apply_visitor(*this);
-        if (r.has_value())
+        for (auto& o : e.rhs)
         {
-            for (auto& o : e.rhs)
-            {
-                r = o.rhs.apply_visitor(*this).and_then(
-                    [&r, &o](auto value)
-                    {
-                        return calculator::result_type(o.op(r.value(), value));
-                    }
-                );
-            }
+            r = o.op(r, o.rhs.apply_visitor(*this));
         }
+        
         return r;
     }
 
     calculator::result_type calculator::operator()(const detail::ast::binary_operation& f) const
     {
-        return f.lhs.apply_visitor(*this).and_then(
-            [&f, this](double vlhs)
-            {
-                return f.rhs.apply_visitor(*this).and_then(
-                    [&vlhs, &f](double val)
-                    {
-                        return calculator::result_type(f.op(vlhs, val));
-                    }
-                );
-            }
-        );
+        return f.op(f.lhs.apply_visitor(*this), f.rhs.apply_visitor(*this));
     }
     
     calculator::result_type calculator::operator()(const detail::ast::unary_operation& f) const
     {
-        return f.rhs.apply_visitor(*this).and_then(
-            [&f](auto value)
-            {
-                return calculator::result_type(f.op(value));
-            }
-        );
+        return f.op(f.rhs.apply_visitor(*this));
     }
 
     calculator::result_type calculator::operator()(const detail::ast::operand& o) const
@@ -82,18 +60,18 @@ namespace abacus
     calculator::result_type calculator::operator()(const detail::ast::ASTVariableType& v) const
     {
         if (v->value) return v->value->apply_visitor(*this);
-        return std::unexpected("Error evaluating variable '"
+        throw std::runtime_error("Error evaluating variable '"
             + v->name + "' with no assigned value.");
     }
 
     calculator::result_type calculator::evaluate(std::string expression)
     {
-        return abacus::parse(expression).and_then(
-            [](auto value)
-            {
-                const abacus::calculator calculator;
-                return calculator(value);
-            }
-        );
+        auto p = abacus::parse(expression);
+        if (p.has_value())
+        {
+            const abacus::calculator calculator;
+            return calculator(p.value());
+        }
+        return 0.;
     }
 }

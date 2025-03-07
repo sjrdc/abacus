@@ -18,13 +18,13 @@
 */
 
 #include "ast.h"
-#include <expected>
+
 namespace abacus
 {
     class calculator
     {
     public:
-        using result_type = std::expected<double, std::string>;
+        using result_type = double;
 
         result_type operator()(const detail::ast::binary_operation&) const;
         result_type operator()(double) const;
