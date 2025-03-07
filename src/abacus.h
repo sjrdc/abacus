@@ -22,7 +22,6 @@
 #include <boost/spirit/home/x3.hpp>
 
 #include <iomanip>
-#include <expected>
 #include <iostream>
 #include <string>
 
@@ -68,6 +67,5 @@ namespace abacus
 		};
 	}
 
-	using operand = detail::ast::operand;
-	std::expected<operand, std::string> parse(const std::string& input);
+	detail::ast::operand parse(const std::string& input);
 }

@@ -66,12 +66,8 @@ namespace abacus
 
     calculator::result_type calculator::evaluate(std::string expression)
     {
-        auto p = abacus::parse(expression);
-        if (p.has_value())
-        {
-            const abacus::calculator calculator;
-            return calculator(p.value());
-        }
-        return 0.;
+        const auto operand = abacus::parse(expression);
+        static const abacus::calculator calculator;
+        return calculator(operand);
     }
 }

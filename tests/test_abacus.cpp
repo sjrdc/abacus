@@ -67,10 +67,8 @@ namespace
 void parse_and_check(const std::string& expression, double value)
 {
 	auto parsed = abacus::parse(expression);
-	ASSERT_TRUE(parsed.has_value());
-
     const abacus::calculator calculator;
-	EXPECT_DOUBLE_EQ(calculator(parsed.value()), value);
+	EXPECT_DOUBLE_EQ(calculator(parsed), value);
 }
 
 TEST_P(ParseAndCheck, can_parse_and_calculate)
@@ -83,30 +81,30 @@ INSTANTIATE_TEST_SUITE_P(ArithmeticTest,ParseAndCheck, number_arithmetic_test_va
 
 TEST(abacus, can_parse_variable_name)
 {
-	EXPECT_TRUE(abacus::parse("xsdf").has_value());
+	EXPECT_NO_THROW(abacus::parse("xsdf"));
 }
 
 TEST(abacus, can_parse_variable_name_with_underscore)
 {
-	EXPECT_TRUE(abacus::parse("xsdf_").has_value());
+	EXPECT_NO_THROW(abacus::parse("xsdf_"));
 }
 
 TEST(abacus, can_parse_variable_name_with_digit)
 {
-	EXPECT_TRUE(abacus::parse("xs112354df_").has_value());
+	EXPECT_NO_THROW(abacus::parse("xs112354df_"));
 }
 
 TEST(abacus, can_parse_variable_name_starting_with_underscore)
 {
-	EXPECT_TRUE(abacus::parse("_xsdf_").has_value());
+	EXPECT_NO_THROW(abacus::parse("_xsdf_"));
 }
 
 TEST(abacus, cannot_parse_variable_name_starting_with_digit)
 {
-    EXPECT_FALSE(abacus::parse("1xsdf_").has_value());
+    EXPECT_THROW(abacus::parse("1xsdf_"), std::runtime_error);
 }
 
 TEST(abacus, can_parse_variable_name_starting_with_function_name)
 {
-    EXPECT_TRUE(abacus::parse("sin1xsdf_").has_value());
+    EXPECT_NO_THROW(abacus::parse("sin1xsdf_"));
 }

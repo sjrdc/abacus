@@ -20,7 +20,10 @@
 #include "ast.h"
 
 #include <boost/spirit/home/x3/string/symbols.hpp>
+
+#include <exception>
 #include <functional>
+
 
 namespace abacus
 {
@@ -147,20 +150,19 @@ namespace abacus
         )
     }
 
-    std::expected<operand, std::string> parse(const std::string& input)
+    detail::ast::operand parse(const std::string& input)
     {
         auto f = begin(input), l = end(input);
-        operand out;
+        detail::ast::operand out;
         if (phrase_parse(f, l, detail::grammar::expression_rule, boost::spirit::x3::space, out))
         {
             if (f != l)
             {
-                auto error = std::string("Unparsed: \"") + std::string(f, l) + "\"";
-                return std::unexpected(error);
+                throw std::runtime_error(std::string("Unparsed: \"") + std::string(f, l) + "\"");
             }
 
             return out;
         }
-        return std::unexpected("");
+        throw std::runtime_error("unknown error occured on parsing" + input);
     }
 }
