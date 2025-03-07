@@ -70,7 +70,10 @@ void parse_and_check(const std::string& expression, double value)
 	ASSERT_TRUE(parsed.has_value());
 
     const abacus::calculator calculator;
-	EXPECT_DOUBLE_EQ(calculator(parsed.value()), value);
+	auto calculated = calculator(parsed.value());
+	ASSERT_TRUE(calculated.has_value());
+
+	EXPECT_DOUBLE_EQ(calculated.value(), value);
 }
 
 TEST_P(ParseAndCheck, can_parse_and_calculate)
@@ -80,7 +83,6 @@ TEST_P(ParseAndCheck, can_parse_and_calculate)
 }
 
 INSTANTIATE_TEST_SUITE_P(ArithmeticTest,ParseAndCheck, number_arithmetic_test_values);
-
 
 TEST(abacus, can_parse_variable_name)
 {

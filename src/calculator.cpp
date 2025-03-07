@@ -16,6 +16,7 @@
     along with this program.If not, see < https://www.gnu.org/licenses/>.
 */
 
+#include "abacus.h"
 #include "calculator.h"
 
 namespace abacus
@@ -27,27 +28,50 @@ namespace abacus
 
     calculator::result_type calculator::operator()(const detail::ast::nil&) const
     {
-        throw std::runtime_error("operation not implemented");
+        return std::unexpected("operation not implemented");
     }
 
     calculator::result_type calculator::operator()(const detail::ast::expression& e) const
     {
         auto r = e.lhs.apply_visitor(*this);
-        for (auto& o : e.rhs)
+        if (r.has_value())
         {
-            r = o.op(r, o.rhs.apply_visitor(*this));
+            for (auto& o : e.rhs)
+            {
+                r = o.rhs.apply_visitor(*this).and_then(
+                    [&r, &o](auto value)
+                    {
+                        return calculator::result_type(o.op(r.value(), value));
+                    }
+                );
+            }
         }
         return r;
     }
 
     calculator::result_type calculator::operator()(const detail::ast::binary_operation& f) const
     {
-        return f.op(f.lhs.apply_visitor(*this), f.rhs.apply_visitor(*this));
+        return f.lhs.apply_visitor(*this).and_then(
+            [&f, this](double vlhs)
+            {
+                return f.rhs.apply_visitor(*this).and_then(
+                    [&vlhs, &f](double val)
+                    {
+                        return calculator::result_type(f.op(vlhs, val));
+                    }
+                );
+            }
+        );
     }
     
     calculator::result_type calculator::operator()(const detail::ast::unary_operation& f) const
     {
-        return f.op(f.rhs.apply_visitor(*this));
+        return f.rhs.apply_visitor(*this).and_then(
+            [&f](auto value)
+            {
+                return calculator::result_type(f.op(value));
+            }
+        );
     }
 
     calculator::result_type calculator::operator()(const detail::ast::operand& o) const
@@ -55,11 +79,21 @@ namespace abacus
         return o.apply_visitor(*this);
     }
 
-    double calculator::operator()(const detail::ast::ASTVariableType& v) const
+    calculator::result_type calculator::operator()(const detail::ast::ASTVariableType& v) const
     {
-
         if (v->value) return v->value->apply_visitor(*this);
-        throw std::runtime_error("Error evaluating variable '"
+        return std::unexpected("Error evaluating variable '"
             + v->name + "' with no assigned value.");
+    }
+
+    calculator::result_type calculator::evaluate(std::string expression)
+    {
+        return abacus::parse(expression).and_then(
+            [](auto value)
+            {
+                const abacus::calculator calculator;
+                return calculator(value);
+            }
+        );
     }
 }
