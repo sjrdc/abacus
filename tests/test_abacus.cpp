@@ -19,7 +19,7 @@
 #include "abacus.h"
 #include "calculator.h"
 #include <gtest/gtest.h>
-
+#include <numbers>
 
 #define MAKE_TEST_VALUE(VAR) test_parameter(#VAR, VAR)
 #define MAKE_TEST_VALUE_FROM_STD_FUNCTION(VAR) test_parameter(#VAR, std::VAR)
@@ -44,6 +44,8 @@ namespace
 		MAKE_TEST_VALUE((2. * 3.)),
 		MAKE_TEST_VALUE((12. / 3.)),
 		test_parameter("2. ^ 5.", 32.),
+		test_parameter("e", std::numbers::e),
+		test_parameter("pi", std::numbers::pi),
 		MAKE_TEST_VALUE_FROM_STD_FUNCTION(sin(1.)),
 		MAKE_TEST_VALUE_FROM_STD_FUNCTION(sinh(2.)),
 		MAKE_TEST_VALUE_FROM_STD_FUNCTION(asin(1.)),

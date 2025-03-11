@@ -23,6 +23,7 @@
 
 #include <exception>
 #include <functional>
+#include <numbers>
 
 
 namespace abacus
@@ -79,6 +80,12 @@ namespace abacus
                 ("^", [](double a, double b) { return std::pow(a, b); });
         }
 
+        numeric_constant_symbol::numeric_constant_symbol()
+        {
+            add
+                ("pi", std::numbers::pi)
+                ("e", std::numbers::e);
+        }
 
         struct expression_class : error_handler {};
         struct additive_class : error_handler {};
@@ -89,6 +96,7 @@ namespace abacus
         struct binary_class : error_handler {};
         struct variable_class : error_handler {};
         struct identifier_class : error_handler {};
+        struct constant_class : error_handler {};
 
         // Rule declarations
         constexpr auto expression_rule = x3::rule<expression_class, ast::operand >{ "expression" };
@@ -100,9 +108,12 @@ namespace abacus
         constexpr auto binary_rule = x3::rule<binary_class, ast::binary_operation >{ "binary" };
         constexpr auto variable_rule = x3::rule<variable_class, ast::ASTVariableType >{ "variable" };
         constexpr auto identifier_rule = x3::rule<identifier_class, std::string>{ "identifier" };
+        constexpr auto constant_rule = x3::rule<constant_class, double>{ "constant" };
 
         // Rule definitions
         constexpr auto expression_rule_def = additive_rule;
+
+        const auto constant_rule_def = numeric_constant_symbol();
 
         const auto additive_rule_def =
             multiplicative_rule >> *(additive_symbol() >> multiplicative_rule);
@@ -131,6 +142,7 @@ namespace abacus
 
         const auto primary_rule_def =
             x3::double_
+            | constant_rule
             | ('(' >> expression_rule >> ')')
             | binary_rule
             | unary_rule
@@ -138,6 +150,7 @@ namespace abacus
             ;
 
         BOOST_SPIRIT_DEFINE(
+            constant_rule,
             expression_rule,
             additive_rule,
             multiplicative_rule,

@@ -65,6 +65,11 @@ namespace abacus
 		{
 			power_symbol();
 		};
+
+		struct numeric_constant_symbol : x3::symbols<double>
+		{
+			numeric_constant_symbol();
+		};
 	}
 
 	detail::ast::operand parse(const std::string& input);
