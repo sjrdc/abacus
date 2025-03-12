@@ -7,6 +7,7 @@ Expressions are composed of variables, functions and numbers.
 We distinguish
 * unary functions; functions with a single argument
 * binary functions; functions with two arguments
+
 Functions are written as the function name, followed by their argument(s) in braces. In case of more than
 one argument, arguments are separated by a comma. Arguments can be composed of other functions, variables or numbers.
 
