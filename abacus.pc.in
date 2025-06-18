@@ -2,6 +2,6 @@ prefix=@CMAKE_INSTALL_PREFIX@
 includedir=${prefix}/@CMAKE_INSTALL_INCLUDEDIR@
 
 Name: @PROJECT_NAME@
-Description: abacus is a C++17 symbolic calculation library
+Description: abacus is a C++17 compatible symbolic calculation library
 Version: @PROJECT_VERSION@
 Cflags: -I"${includedir}"
