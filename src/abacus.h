@@ -17,12 +17,11 @@
     along with this program.If not, see < https://www.gnu.org/licenses/>.
 */
 
-#include "ast_adapted.h"
+#include "ast.h"
 
-#include <boost/spirit/home/x3.hpp>
+// part of abacus interface
+#include "calculator.h"
 
-#include <iomanip>
-#include <iostream>
 #include <string>
 
 namespace abacus
