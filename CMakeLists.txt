@@ -31,7 +31,7 @@ add_subdirectory(src)
 
 add_library(abacus::abacus ALIAS abacus)
 target_include_directories(abacus INTERFACE
-    $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
+    $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/abacus.h>
     $<INSTALL_INTERFACE:include>
 )
 
@@ -40,8 +40,13 @@ if(CMAKE_CURRENT_SOURCE_DIR STREQUAL CMAKE_SOURCE_DIR)
 
     # We're in the root, define additional targets for developers.
     option(ABACUS_BUILD_TESTS "Build abacus tests" ON)
+    option(ABACUS_BUILD_EXAMPLES "Build abacus examples" ON)
 
-    if(MY_PROJECT_BUILD_TESTS)
+    if(ABACUS_BUILD_EXAMPLES)
+        add_subdirectory(examples)
+    endif()
+
+    if(ABACUS_BUILD_TESTS)
         enable_testing()
         add_subdirectory(tests)
     endif()

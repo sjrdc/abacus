@@ -18,8 +18,10 @@
 
 #include "abacus.h"
 
+#include <algorithm>
 #include <iostream>
 #include <string>
+#include <vector>
 
 namespace
 {
@@ -45,6 +47,6 @@ int main(int argc, char** argv)
 
     const auto expression = string_from_args(argc, argv);
 
-    std::cout << expression << " = " << abacus::calculator::evaluate(expression) << std::endl;
+    std::cout << expression << " = " << abacus::evaluate(expression) << std::endl;
     return 0;
 }

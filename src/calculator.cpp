@@ -16,22 +16,27 @@
     along with this program.If not, see < https://www.gnu.org/licenses/>.
 */
 
-#include "abacus.h"
 #include "calculator.h"
+
+#include "abacus.h"
+#include "ast.h"
+#include "parse.h"
 
 namespace abacus
 {
-    calculator::result_type calculator::operator()(double d) const
+    detail::ast::operand parse(const std::string& input);
+
+    result_type calculator::operator()(double d) const
     {
         return d;
     }
 
-    calculator::result_type calculator::operator()(const detail::ast::nil&) const
+    result_type calculator::operator()(const detail::ast::nil&) const
     {
         throw std::runtime_error("operation not implemented");
     }
 
-    calculator::result_type calculator::operator()(const detail::ast::expression& e) const
+    result_type calculator::operator()(const detail::ast::expression& e) const
     {
         auto r = e.lhs.apply_visitor(*this);
         for (auto& o : e.rhs)
@@ -42,31 +47,31 @@ namespace abacus
         return r;
     }
 
-    calculator::result_type calculator::operator()(const detail::ast::binary_operation& f) const
+    result_type calculator::operator()(const detail::ast::binary_operation& f) const
     {
         return f.op(f.lhs.apply_visitor(*this), f.rhs.apply_visitor(*this));
     }
     
-    calculator::result_type calculator::operator()(const detail::ast::unary_operation& f) const
+    result_type calculator::operator()(const detail::ast::unary_operation& f) const
     {
         return f.op(f.rhs.apply_visitor(*this));
     }
 
-    calculator::result_type calculator::operator()(const detail::ast::operand& o) const
+    result_type calculator::operator()(const detail::ast::operand& o) const
     {
         return o.apply_visitor(*this);
     }
 
-    calculator::result_type calculator::operator()(const detail::ast::ASTVariableType& v) const
+    result_type calculator::operator()(const detail::ast::ASTVariableType& v) const
     {
         if (v->value) return v->value->apply_visitor(*this);
         throw std::runtime_error("Error evaluating variable '"
             + v->name + "' with no assigned value.");
     }
 
-    calculator::result_type calculator::evaluate(std::string expression)
+    result_type evaluate(std::string expression)
     {
-        const auto operand = abacus::parse(expression);
+        const auto operand = abacus::detail::parse(expression);
         static const abacus::calculator calculator;
         return calculator(operand);
     }

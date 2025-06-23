@@ -18,20 +18,8 @@
 */
 
 #include "ast.h"
-#include "abacus.h"
 
-namespace abacus
+namespace abacus::detail
 {
-    class calculator
-    {
-    public:
-        using result_type = abacus::result_type;
-        result_type operator()(const detail::ast::binary_operation&) const;
-        result_type operator()(double) const;
-        result_type operator()(const detail::ast::expression&) const;
-        result_type operator()(const detail::ast::nil&) const;
-        result_type operator()(const detail::ast::operand&) const;
-        result_type operator()(const detail::ast::unary_operation&) const;
-        result_type operator()(const detail::ast::ASTVariableType&) const;
-    };
+    ast::operand parse(const std::string& input);
 }

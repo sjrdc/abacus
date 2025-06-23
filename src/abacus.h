@@ -17,14 +17,10 @@
     along with this program.If not, see < https://www.gnu.org/licenses/>.
 */
 
-#include "ast.h"
-
-// part of abacus interface
-#include "calculator.h"
-
 #include <string>
 
 namespace abacus
 {
-    detail::ast::operand parse(const std::string& input);
+    using result_type = double;
+    result_type evaluate(std::string expression);
 }

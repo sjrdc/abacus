@@ -193,19 +193,22 @@ namespace abacus
         )
     }
 
-    detail::ast::operand parse(const std::string& input)
+    namespace detail
     {
-        auto f = begin(input), l = end(input);
-        detail::ast::operand out;
-        if (phrase_parse(f, l, detail::grammar::expression_rule, boost::spirit::x3::space, out))
+        ast::operand parse(const std::string& input)
         {
-            if (f != l)
+            auto f = begin(input), l = end(input);
+            detail::ast::operand out;
+            if (phrase_parse(f, l, detail::grammar::expression_rule, boost::spirit::x3::space, out))
             {
-                throw std::runtime_error(std::string("Unparsed: \"") + std::string(f, l) + "\"");
-            }
+                if (f != l)
+                {
+                    throw std::runtime_error(std::string("Unparsed: \"") + std::string(f, l) + "\"");
+                }
 
-            return out;
+                return out;
+            }
+            throw std::runtime_error("unknown error occured on parsing" + input);
         }
-        throw std::runtime_error("unknown error occured on parsing" + input);
     }
 }
