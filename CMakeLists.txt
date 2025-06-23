@@ -35,6 +35,20 @@ target_include_directories(abacus INTERFACE
     $<INSTALL_INTERFACE:include>
 )
 
+if(CMAKE_CURRENT_SOURCE_DIR STREQUAL CMAKE_SOURCE_DIR)
+    set(ABACUS_MASTER_PROJECT TRUE)
+
+    # We're in the root, define additional targets for developers.
+    option(ABACUS_BUILD_TESTS "Build abacus tests" ON)
+
+    if(MY_PROJECT_BUILD_TESTS)
+        enable_testing()
+        add_subdirectory(tests)
+    endif()
+else()
+    set(ABACUS_MASTER_PROJECT FALSE)
+endif()
+
 option(ABACUS_INSTALL "Generate the install target" ${ABACUS_MASTER_PROJECT})
 if(ABACUS_INSTALL)
     include(GNUInstallDirs)
@@ -73,10 +87,4 @@ if(ABACUS_INSTALL)
         FILES ${CMAKE_CURRENT_BINARY_DIR}/${PROJECT_NAME}.pc
         DESTINATION ${CMAKE_INSTALL_DATAROOTDIR}/pkgconfig
     )
-endif()
-
-option(BUILD_ABACUS_TESTS "Build tests" ON)
-if(BUILD_ABACUS_TESTS)
-    enable_testing()
-    add_subdirectory(tests)
 endif()
