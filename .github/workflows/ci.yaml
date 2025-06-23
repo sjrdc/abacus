@@ -52,7 +52,7 @@ jobs:
       run: |
         echo "build-output-dir=${{ github.workspace }}/build" >> "$GITHUB_OUTPUT"
 
-    - name: install libstdc++
+    - name: Install libstdc++
       id: install-libstdcpp
       if: matrix.os == 'ubuntu-latest'
       run: |

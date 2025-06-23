@@ -31,12 +31,6 @@ namespace
     const auto varname = std::string("variable");
 }
 
-TEST(store, can_store_variable)
-{
-    variable_store store;
-    auto variable = store.get(varname);
-}
-
 TEST(store, retrieves_stored_variable)
 {
     variable_store store;

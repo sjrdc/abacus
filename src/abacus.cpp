@@ -27,65 +27,94 @@
 
 
 namespace abacus
-{
+{ 
     namespace detail::grammar
     {
         namespace x3 = boost::spirit::x3;
-
-        unary_function_symbol::unary_function_symbol()
+        struct error_handler
         {
-            add
-                ("sin", [](double x) { return std::sin(x); })
-                ("sinh", [](double x) { return std::sinh(x); })
-                ("asin", [](double x) { return std::asin(x); })
-                ("asinh", [](double x) { return std::asinh(x); })
-                ("cos", [](double x) { return std::cos(x); })
-                ("cosh", [](double x) { return std::cosh(x); })
-                ("acos", [](double x) { return std::acos(x); })
-                ("acosh", [](double x) { return std::acosh(x); })
-                ("tan", [](double x) { return std::tan(x); })
-                ("tanh", [](double x) { return std::tanh(x); })
-                ("atan", [](double x) { return std::atan(x); })
-                ("log10", [](double x) { return std::log10(x); })
-                ("log2", [](double x) { return std::log2(x); })
-                ("log", [](double x) { return std::log(x); })
-                ("abs", [](double x) { return std::abs(x); });
-        }
+            template <typename It, typename Ctx>
+            x3::error_handler_result on_error(It f, It l, x3::expectation_failure<It> const& e, Ctx const& /*ctx*/) const {
+                std::cout << std::string(f, l) << "\n"
+                    << std::setw(1 + std::distance(f, e.where())) << "^"
+                    << "-- expected: " << e.which() << "\n";
+                return x3::error_handler_result::fail;
+            }
+        };
 
-        binary_function_symbol::binary_function_symbol()
+        struct unary_function_symbol : x3::symbols<ast::unary_operation::function>
         {
-            add
-                ("atan2", [](double a, double b) { return std::atan2(a, b); })
-                ("min", [](double a, double b) { return std::min(a, b); })
-                ("max", [](double a, double b) { return std::max(a, b); });
-        }
+            unary_function_symbol()
+            {
+                add
+                    ("sin", [](double x) { return std::sin(x); })
+                    ("sinh", [](double x) { return std::sinh(x); })
+                    ("asin", [](double x) { return std::asin(x); })
+                    ("asinh", [](double x) { return std::asinh(x); })
+                    ("cos", [](double x) { return std::cos(x); })
+                    ("cosh", [](double x) { return std::cosh(x); })
+                    ("acos", [](double x) { return std::acos(x); })
+                    ("acosh", [](double x) { return std::acosh(x); })
+                    ("tan", [](double x) { return std::tan(x); })
+                    ("tanh", [](double x) { return std::tanh(x); })
+                    ("atan", [](double x) { return std::atan(x); })
+                    ("log10", [](double x) { return std::log10(x); })
+                    ("log2", [](double x) { return std::log2(x); })
+                    ("log", [](double x) { return std::log(x); })
+                    ("abs", [](double x) { return std::abs(x); });
+            }
+        };
 
-        additive_symbol::additive_symbol()
+        struct binary_function_symbol : x3::symbols<ast::binary_operation::function>
         {
-            add
-                ("+", std::plus<double>())
-                ("-", std::minus<double>());
-        }
+            binary_function_symbol()
+            {
+                add
+                    ("atan2", [](double a, double b) { return std::atan2(a, b); })
+                    ("min", [](double a, double b) { return std::min(a, b); })
+                    ("max", [](double a, double b) { return std::max(a, b); });
+            }
+        };
 
-        multiplicative_symbol::multiplicative_symbol()
+        struct additive_symbol : x3::symbols<ast::binary_operation::function>
         {
-            add
-                ("/", std::divides<double>())
-                ("*", std::multiplies<double>());
-        }
+            additive_symbol() 
+            {
+                add
+                    ("+", std::plus<double>())
+                    ("-", std::minus<double>());
+            }
+        };
 
-        power_symbol::power_symbol()
+        struct multiplicative_symbol : x3::symbols<ast::binary_operation::function>
         {
-            add
-                ("^", [](double a, double b) { return std::pow(a, b); });
-        }
+            multiplicative_symbol()
+            {
+                add
+                    ("/", std::divides<double>())
+                    ("*", std::multiplies<double>());
+            }
+        };
 
-        numeric_constant_symbol::numeric_constant_symbol()
+        struct power_symbol : x3::symbols<ast::binary_operation::function>
         {
-            add
-                ("pi", std::numbers::pi)
-                ("e", std::numbers::e);
-        }
+            power_symbol()
+            {
+                add
+                    ("^", [](double a, double b) { return std::pow(a, b); });
+
+            }
+        };
+
+        struct numeric_constant_symbol : x3::symbols<double>
+        {
+            numeric_constant_symbol()
+            {
+                add
+                    ("pi", std::numbers::pi)
+                    ("e", std::numbers::e);
+            }
+        };
 
         struct expression_class : error_handler {};
         struct additive_class : error_handler {};

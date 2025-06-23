@@ -18,7 +18,9 @@
 
 #include "abacus.h"
 #include "calculator.h"
+
 #include <gtest/gtest.h>
+
 #include <numbers>
 
 #define MAKE_TEST_VALUE(VAR) test_parameter(#VAR, VAR)

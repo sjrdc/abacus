@@ -25,7 +25,7 @@ namespace abacus
     class variable_store
     {
     public:
-        using store_type = std::unordered_map<std::string, std::shared_ptr<detail::ast::variable>>;
+        using store_type = std::unordered_map<std::string, abacus::detail::ast::ASTVariableType>;
         using value_type = store_type::mapped_type;
         using key_type = store_type::key_type;
 
