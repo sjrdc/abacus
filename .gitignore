@@ -33,4 +33,6 @@
 
 out
 .vs
+.vscode
+build
 CMakeSettings.json
