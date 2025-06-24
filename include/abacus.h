@@ -18,3 +18,4 @@
 */
 
 #include "abacus/evaluate.h"
+#include "abacus/operand.h"

@@ -17,31 +17,16 @@
     along with this program.If not, see < https://www.gnu.org/licenses/>.
 */
 
-#include <boost/spirit/home/x3.hpp>
-#include <boost/spirit/home/x3/support/ast/variant.hpp>
+#include <memory>
 
 namespace abacus
 {
-    namespace detail::ast
+    namespace detail
     {
-        struct nil {};
-        struct unary_operation;
-        struct binary_operation;
-        struct expression;
-        struct variable;
-
-        using ASTVariableType = std::shared_ptr<variable>;
+        class operand_pimpl;
     }
-    
-    struct operand : boost::spirit::x3::variant<
-        detail::ast::nil,
-        double,
-        boost::spirit::x3::forward_ast<detail::ast::unary_operation>,
-        boost::spirit::x3::forward_ast<detail::ast::binary_operation>,
-        boost::spirit::x3::forward_ast<detail::ast::expression>,
-        boost::spirit::x3::forward_ast<detail::ast::ASTVariableType> >
+
+    class operand
     {
-        using base_type::base_type;
-        using base_type::operator=;
     };
 }

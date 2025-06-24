@@ -19,6 +19,7 @@
 
 #include "ast.h"
 #include "abacus.h"
+#include "abacus/operand.h"
 
 namespace abacus
 {
@@ -32,8 +33,10 @@ namespace abacus
         result_type operator()(double) const;
         result_type operator()(const detail::ast::expression&) const;
         result_type operator()(const detail::ast::nil&) const;
-        result_type operator()(const operand&) const;
+        result_type operator()(const detail::ast::operand&) const;
         result_type operator()(const detail::ast::unary_operation&) const;
         result_type operator()(const detail::ast::ASTVariableType&) const;
+
+        result_type operator()(const abacus::operand&) const;
     };
 }

@@ -129,14 +129,14 @@ namespace abacus
         struct constant_class : error_handler {};
 
         // Rule declarations
-        constexpr auto expression_rule = x3::rule<expression_class, operand >{ "expression" };
-        constexpr auto primary_rule = x3::rule<primary_class, operand >{ "primary" };
-        constexpr auto additive_rule = x3::rule<additive_class, ast::expression >{ "additive" };
+        constexpr auto expression_rule = x3::rule<expression_class, ast::operand>{ "expression" };
+        constexpr auto primary_rule = x3::rule<primary_class, ast::operand>{ "primary" };
+        constexpr auto additive_rule = x3::rule<additive_class, ast::expression>{ "additive" };
         constexpr auto multiplicative_rule = x3::rule<multiplicative_class, ast::expression>{ "multiplicative" };
-        constexpr auto factor_rule = x3::rule<factor_class, ast::expression >{ "factor" };
-        constexpr auto unary_rule = x3::rule<unary_class, ast::unary_operation >{ "unary" };
-        constexpr auto binary_rule = x3::rule<binary_class, ast::binary_operation >{ "binary" };
-        constexpr auto variable_rule = x3::rule<variable_class, ast::ASTVariableType >{ "variable" };
+        constexpr auto factor_rule = x3::rule<factor_class, ast::expression>{ "factor" };
+        constexpr auto unary_rule = x3::rule<unary_class, ast::unary_operation>{ "unary" };
+        constexpr auto binary_rule = x3::rule<binary_class, ast::binary_operation>{ "binary" };
+        constexpr auto variable_rule = x3::rule<variable_class, ast::ASTVariableType>{ "variable" };
         constexpr auto identifier_rule = x3::rule<identifier_class, std::string>{ "identifier" };
         constexpr auto constant_rule = x3::rule<constant_class, double>{ "constant" };
 
@@ -195,10 +195,10 @@ namespace abacus
 
     namespace detail
     {
-        operand parse(const std::string& input)
+        abacus::detail::ast::operand parse(const std::string& input)
         {
             auto f = begin(input), l = end(input);
-            operand out;
+            abacus::detail::ast::operand out;
             if (phrase_parse(f, l, detail::grammar::expression_rule, boost::spirit::x3::space, out))
             {
                 if (f != l)

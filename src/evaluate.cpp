@@ -1,4 +1,3 @@
-#pragma once
 /*
     This file is part of abacus
     Copyright(C) 2025 Sjoerd Crijns
@@ -17,13 +16,29 @@
     along with this program.If not, see < https://www.gnu.org/licenses/>.
 */
 
-#include <string>
-#include "operand.h"
+#include "calculator.h"
+#include "parse.h"
+
+namespace 
+{
+    const abacus::calculator calculator;
+}
 
 namespace abacus
 {
-    using result_type = double;
-    result_type evaluate(std::string);
-    result_type evaluate(const operand&);
-    result_type evaluate(operand&&);
+    result_type evaluate(std::string expression)
+    {
+        const auto operand = abacus::detail::parse(expression);
+        return ::calculator(operand);
+    }
+
+    result_type evaluate(const operand& o)
+    {
+        return 0.;
+    }
+
+    result_type evaluate(operand&& o)
+    {
+        return 0.;
+    }
 }
