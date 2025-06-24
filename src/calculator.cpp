@@ -24,7 +24,7 @@
 
 namespace abacus
 {
-    detail::ast::operand parse(const std::string& input);
+    operand parse(const std::string& input);
 
     result_type calculator::operator()(double d) const
     {
@@ -57,7 +57,7 @@ namespace abacus
         return f.op(f.rhs.apply_visitor(*this));
     }
 
-    result_type calculator::operator()(const detail::ast::operand& o) const
+    result_type calculator::operator()(const operand& o) const
     {
         return o.apply_visitor(*this);
     }

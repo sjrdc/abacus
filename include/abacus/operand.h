@@ -17,23 +17,31 @@
     along with this program.If not, see < https://www.gnu.org/licenses/>.
 */
 
-#include "ast.h"
-#include "abacus.h"
+#include <boost/spirit/home/x3.hpp>
+#include <boost/spirit/home/x3/support/ast/variant.hpp>
 
 namespace abacus
 {
-    class calculator
+    namespace detail::ast
     {
-    public:
-        // needed for visitor
-        using result_type = abacus::result_type;
+        struct nil {};
+        struct unary_operation;
+        struct binary_operation;
+        struct expression;
+        struct variable;
 
-        result_type operator()(const detail::ast::binary_operation&) const;
-        result_type operator()(double) const;
-        result_type operator()(const detail::ast::expression&) const;
-        result_type operator()(const detail::ast::nil&) const;
-        result_type operator()(const operand&) const;
-        result_type operator()(const detail::ast::unary_operation&) const;
-        result_type operator()(const detail::ast::ASTVariableType&) const;
+        using ASTVariableType = std::shared_ptr<variable>;
+    }
+    
+    struct operand : boost::spirit::x3::variant<
+        detail::ast::nil,
+        double,
+        boost::spirit::x3::forward_ast<detail::ast::unary_operation>,
+        boost::spirit::x3::forward_ast<detail::ast::binary_operation>,
+        boost::spirit::x3::forward_ast<detail::ast::expression>,
+        boost::spirit::x3::forward_ast<detail::ast::ASTVariableType> >
+    {
+        using base_type::base_type;
+        using base_type::operator=;
     };
 }

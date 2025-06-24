@@ -21,5 +21,5 @@
 
 namespace abacus::detail
 {
-    ast::operand parse(const std::string& input);
+    operand parse(const std::string& input);
 }

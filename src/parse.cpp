@@ -129,8 +129,8 @@ namespace abacus
         struct constant_class : error_handler {};
 
         // Rule declarations
-        constexpr auto expression_rule = x3::rule<expression_class, ast::operand >{ "expression" };
-        constexpr auto primary_rule = x3::rule<primary_class, ast::operand >{ "primary" };
+        constexpr auto expression_rule = x3::rule<expression_class, operand >{ "expression" };
+        constexpr auto primary_rule = x3::rule<primary_class, operand >{ "primary" };
         constexpr auto additive_rule = x3::rule<additive_class, ast::expression >{ "additive" };
         constexpr auto multiplicative_rule = x3::rule<multiplicative_class, ast::expression>{ "multiplicative" };
         constexpr auto factor_rule = x3::rule<factor_class, ast::expression >{ "factor" };
@@ -195,10 +195,10 @@ namespace abacus
 
     namespace detail
     {
-        ast::operand parse(const std::string& input)
+        operand parse(const std::string& input)
         {
             auto f = begin(input), l = end(input);
-            detail::ast::operand out;
+            operand out;
             if (phrase_parse(f, l, detail::grammar::expression_rule, boost::spirit::x3::space, out))
             {
                 if (f != l)
