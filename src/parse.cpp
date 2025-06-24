@@ -208,7 +208,7 @@ namespace abacus
 
                 return out;
             }
-            throw std::runtime_error("unknown error occured on parsing" + input);
+            throw std::runtime_error("unknown error occurred on parsing " + input);
         }
     }
 }
