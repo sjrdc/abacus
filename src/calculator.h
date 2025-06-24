@@ -25,7 +25,9 @@ namespace abacus
     class calculator
     {
     public:
+        // needed for visitor
         using result_type = abacus::result_type;
+        
         result_type operator()(const detail::ast::binary_operation&) const;
         result_type operator()(double) const;
         result_type operator()(const detail::ast::expression&) const;

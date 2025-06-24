@@ -11,8 +11,11 @@ FetchContent_MakeAvailable(googletest)
 
 enable_testing()
 
-include_directories(${CMAKE_SOURCE_DIR}/src)
-add_executable(test_abacus test_store.cpp test_abacus.cpp main.cpp test_store.cpp)
+add_executable(test_abacus test_store.cpp test_abacus.cpp test_parse.cpp main.cpp test_store.cpp)
+target_include_directories(test_abacus 
+  PRIVATE ${ABACUS_INCLUDE_DIR}
+  PRIVATE ${CMAKE_SOURCE_DIR}/src
+  )
 target_link_libraries(test_abacus abacus gtest_main)
 
 include(GoogleTest)

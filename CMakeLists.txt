@@ -24,14 +24,13 @@ else()
 endif()
 
 find_package(Boost REQUIRED)
-if(Boost_FOUND)
-    include_directories(${Boost_INCLUDE_DIRS})
-endif()
+set(ABACUS_INCLUDE_DIR ${CMAKE_CURRENT_SOURCE_DIR}/include)
+
 add_subdirectory(src)
 
 add_library(abacus::abacus ALIAS abacus)
 target_include_directories(abacus INTERFACE
-    $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/abacus.h>
+    $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
     $<INSTALL_INTERFACE:include>
 )
 
