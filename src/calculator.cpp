@@ -57,7 +57,7 @@ namespace abacus
         return f.op(f.rhs.apply_visitor(*this));
     }
 
-    result_type calculator::operator()(const operand& o) const
+    result_type calculator::operator()(const detail::ast::operand& o) const
     {
         return o.apply_visitor(*this);
     }
@@ -69,10 +69,4 @@ namespace abacus
             + v->name + "' with no assigned value.");
     }
 
-    result_type evaluate(std::string expression)
-    {
-        const auto operand = abacus::detail::parse(expression);
-        static const abacus::calculator calculator;
-        return calculator(operand);
-    }
 }
