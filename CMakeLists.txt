@@ -49,46 +49,44 @@ if(CMAKE_CURRENT_SOURCE_DIR STREQUAL CMAKE_SOURCE_DIR)
         enable_testing()
         add_subdirectory(tests)
     endif()
-else()
-    set(ABACUS_MASTER_PROJECT FALSE)
-endif()
 
-option(ABACUS_INSTALL "Generate the install target" ${ABACUS_MASTER_PROJECT})
-if(ABACUS_INSTALL)
-    include(GNUInstallDirs)
-    include(CMakePackageConfigHelpers)
+    option(ABACUS_INSTALL "Generate the install target" ${ABACUS_MASTER_PROJECT})
+    if(ABACUS_INSTALL)
+        include(GNUInstallDirs)
+        include(CMakePackageConfigHelpers)
 
-    install(TARGETS abacus EXPORT ${PROJECT_NAME}Targets)
-    install(DIRECTORY include/ABACUS DESTINATION ${CMAKE_INSTALL_INCLUDEDIR})
+        install(TARGETS abacus EXPORT ${PROJECT_NAME}Targets)
+        install(DIRECTORY include/ABACUS DESTINATION ${CMAKE_INSTALL_INCLUDEDIR})
 
-    set(configFile ${CMAKE_CURRENT_BINARY_DIR}/${PROJECT_NAME}/cmake/Config.cmake)
-    set(versionFile ${CMAKE_CURRENT_BINARY_DIR}/${PROJECT_NAME}ConfigVersion.cmake)
-    set(configInstallDestination ${CMAKE_INSTALL_LIBDIR}/cmake/${PROJECT_NAME})
+        set(configFile ${CMAKE_CURRENT_BINARY_DIR}/${PROJECT_NAME}/cmake/Config.cmake)
+        set(versionFile ${CMAKE_CURRENT_BINARY_DIR}/${PROJECT_NAME}ConfigVersion.cmake)
+        set(configInstallDestination ${CMAKE_INSTALL_LIBDIR}/cmake/${PROJECT_NAME})
 
-    configure_package_config_file(
-        ${CMAKE_CURRENT_SOURCE_DIR}/cmake/Config.cmake.in
-        ${configFile}
-        INSTALL_DESTINATION ${configInstallDestination}
-    )
-    if(${CMAKE_VERSION} VERSION_GREATER 3.13)
-        write_basic_package_version_file("${versionFile}" COMPATIBILITY SameMajorVersion ARCH_INDEPENDENT)
-    else()
-        write_basic_package_version_file("${versionFile}" COMPATIBILITY SameMajorVersion)
+        configure_package_config_file(
+            ${CMAKE_CURRENT_SOURCE_DIR}/cmake/Config.cmake.in
+            ${configFile}
+            INSTALL_DESTINATION ${configInstallDestination}
+        )
+        if(${CMAKE_VERSION} VERSION_GREATER 3.13)
+            write_basic_package_version_file("${versionFile}" COMPATIBILITY SameMajorVersion ARCH_INDEPENDENT)
+        else()
+            write_basic_package_version_file("${versionFile}" COMPATIBILITY SameMajorVersion)
+        endif()
+        configure_file(
+            ${CMAKE_CURRENT_SOURCE_DIR}/${PROJECT_NAME}.pc.in
+            ${CMAKE_CURRENT_BINARY_DIR}/${PROJECT_NAME}.pc
+            @ONLY
+        )
+
+        install(FILES ${configFile} ${versionFile} DESTINATION ${configInstallDestination})
+        install(
+            EXPORT ${PROJECT_NAME}Targets
+            NAMESPACE "ABACUS::"
+            DESTINATION ${configInstallDestination}
+        )
+        install(
+            FILES ${CMAKE_CURRENT_BINARY_DIR}/${PROJECT_NAME}.pc
+            DESTINATION ${CMAKE_INSTALL_DATAROOTDIR}/pkgconfig
+        )
     endif()
-    configure_file(
-        ${CMAKE_CURRENT_SOURCE_DIR}/${PROJECT_NAME}.pc.in
-        ${CMAKE_CURRENT_BINARY_DIR}/${PROJECT_NAME}.pc
-        @ONLY
-    )
-
-    install(FILES ${configFile} ${versionFile} DESTINATION ${configInstallDestination})
-    install(
-        EXPORT ${PROJECT_NAME}Targets
-        NAMESPACE "ABACUS::"
-        DESTINATION ${configInstallDestination}
-    )
-    install(
-        FILES ${CMAKE_CURRENT_BINARY_DIR}/${PROJECT_NAME}.pc
-        DESTINATION ${CMAKE_INSTALL_DATAROOTDIR}/pkgconfig
-    )
 endif()
