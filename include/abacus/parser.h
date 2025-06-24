@@ -17,21 +17,27 @@
     along with this program.If not, see < https://www.gnu.org/licenses/>.
 */
 
-#include "ast.h"
-#include <unordered_map>
+#include "operand.h"
 
-namespace abacus::detail
+#include <memory>
+#include <string>
+
+namespace abacus
 {
-    class variable_store
+    namespace detail
+    {
+        class parser_pimpl;
+    }
+
+    class parser
     {
     public:
-        using store_type = std::unordered_map<std::string, abacus::detail::ast::ASTVariableType>;
-        using value_type = store_type::mapped_type;
-        using key_type = store_type::key_type;
-
-        value_type get(const key_type&);
+        parser();
+        ~parser();
+        
+        operand parse(std::string);
 
     private:
-        std::unordered_map<std::string, value_type> variables;
+        std::unique_ptr<detail::parser_pimpl> pimpl;
     };
 }

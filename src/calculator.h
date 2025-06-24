@@ -21,7 +21,7 @@
 #include "abacus.h"
 #include "abacus/operand.h"
 
-namespace abacus
+namespace abacus::detail
 {
     class calculator
     {

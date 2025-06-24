@@ -22,10 +22,8 @@
 #include "ast.h"
 #include "parse.h"
 
-namespace abacus
+namespace abacus::detail
 {
-    operand parse(const std::string& input);
-
     result_type calculator::operator()(double d) const
     {
         return d;
@@ -69,4 +67,8 @@ namespace abacus
             + v->name + "' with no assigned value.");
     }
 
+    result_type calculator::operator()(const abacus::operand& o) const
+    {
+        return o.evaluate(*this);
+    }
 }

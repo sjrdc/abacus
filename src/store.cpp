@@ -18,7 +18,7 @@
 
 #include "store.h"
 
-namespace abacus
+namespace abacus::detail
 {
     variable_store::value_type variable_store::get(const store_type::key_type& name)
     {
