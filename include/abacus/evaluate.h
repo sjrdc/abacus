@@ -17,4 +17,10 @@
     along with this program.If not, see < https://www.gnu.org/licenses/>.
 */
 
-#include "abacus/evaluate.h"
+#include <string>
+
+namespace abacus
+{
+    using result_type = double;
+    result_type evaluate(std::string expression);
+}
