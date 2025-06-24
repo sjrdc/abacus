@@ -1,4 +1,3 @@
-#pragma once
 /*
     This file is part of abacus
     Copyright(C) 2025 Sjoerd Crijns
@@ -17,21 +16,37 @@
     along with this program.If not, see < https://www.gnu.org/licenses/>.
 */
 
-#include "ast.h"
-#include <unordered_map>
+#include "calculator.h"
+#include "operand_pimpl.h"
+#include "parse.h"
 
-namespace abacus::detail
+namespace abacus
 {
-    class variable_store
+    namespace detail
     {
-    public:
-        using store_type = std::unordered_map<std::string, abacus::detail::ast::ASTVariableType>;
-        using value_type = store_type::mapped_type;
-        using key_type = store_type::key_type;
+        operand_pimpl::operand_pimpl(ast::operand operand) :
+            operand(std::move(operand))
+        {
+        }
 
-        value_type get(const key_type&);
+        template <>
+        result_type operand_pimpl::evaluate(const calculator& calculator) const
+        {
+            return calculator(operand);
+        }
+    }
 
-    private:
-        std::unordered_map<std::string, value_type> variables;
-    };
+
+    operand::~operand() = default;
+
+    operand::operand(std::unique_ptr<detail::operand_pimpl>&& pimpl) :
+        pimpl(std::move(pimpl))
+    {
+    }
+
+    template <>
+    result_type operand::evaluate(const detail::calculator& calculator) const
+    {
+        return pimpl->evaluate(calculator);
+    }
 }

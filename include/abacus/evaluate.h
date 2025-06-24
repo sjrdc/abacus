@@ -18,11 +18,12 @@
 */
 
 #include <string>
+
+#include "datatypes.h"
 #include "operand.h"
 
 namespace abacus
 {
-    using result_type = double;
     result_type evaluate(std::string);
     result_type evaluate(const operand&);
     result_type evaluate(operand&&);

@@ -21,7 +21,7 @@
 
 namespace 
 {
-    const abacus::calculator calculator;
+    const abacus::detail::calculator calculator;
 }
 
 namespace abacus
@@ -34,11 +34,11 @@ namespace abacus
 
     result_type evaluate(const operand& o)
     {
-        return 0.;
+        return ::calculator(o);
     }
 
     result_type evaluate(operand&& o)
     {
-        return 0.;
+        return ::calculator(o);
     }
 }

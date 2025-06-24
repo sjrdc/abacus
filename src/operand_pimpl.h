@@ -18,20 +18,22 @@
 */
 
 #include "ast.h"
-#include <unordered_map>
+#include "abacus/datatypes.h"
 
-namespace abacus::detail
+namespace abacus
 {
-    class variable_store
+    namespace detail
     {
-    public:
-        using store_type = std::unordered_map<std::string, abacus::detail::ast::ASTVariableType>;
-        using value_type = store_type::mapped_type;
-        using key_type = store_type::key_type;
+        class operand_pimpl
+        {
+        public:
+            operand_pimpl(ast::operand);
+            
+            template <typename V>
+            result_type evaluate(const V&) const;
 
-        value_type get(const key_type&);
-
-    private:
-        std::unordered_map<std::string, value_type> variables;
-    };
+        private:
+            ast::operand operand;
+        };
+    }
 }

@@ -1,4 +1,3 @@
-#pragma once
 /*
     This file is part of abacus
     Copyright(C) 2025 Sjoerd Crijns
@@ -17,21 +16,31 @@
     along with this program.If not, see < https://www.gnu.org/licenses/>.
 */
 
-#include "ast.h"
-#include <unordered_map>
+#include "abacus/parser.h"
+#include "parse.h"
+#include "operand_pimpl.h"
 
 namespace abacus::detail
 {
-    class variable_store
+    class parser_pimpl
     {
     public:
-        using store_type = std::unordered_map<std::string, abacus::detail::ast::ASTVariableType>;
-        using value_type = store_type::mapped_type;
-        using key_type = store_type::key_type;
-
-        value_type get(const key_type&);
-
     private:
-        std::unordered_map<std::string, value_type> variables;
     };
+}
+
+namespace abacus
+{
+    parser::parser() :
+        pimpl(std::make_unique<detail::parser_pimpl>())
+    {
+    }
+
+    parser::~parser() = default;
+
+    operand parser::parse(std::string expression)
+    {
+        auto q = std::make_unique<detail::operand_pimpl>(detail::parse(expression));
+        return operand(std::move(q));
+    }
 }

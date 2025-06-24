@@ -17,21 +17,7 @@
     along with this program.If not, see < https://www.gnu.org/licenses/>.
 */
 
-#include "ast.h"
-#include <unordered_map>
-
-namespace abacus::detail
+namespace abacus
 {
-    class variable_store
-    {
-    public:
-        using store_type = std::unordered_map<std::string, abacus::detail::ast::ASTVariableType>;
-        using value_type = store_type::mapped_type;
-        using key_type = store_type::key_type;
-
-        value_type get(const key_type&);
-
-    private:
-        std::unordered_map<std::string, value_type> variables;
-    };
+    using result_type = double;
 }

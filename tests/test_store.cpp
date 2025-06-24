@@ -24,7 +24,7 @@
 
 #include <numbers>
 
-using namespace abacus;
+using namespace abacus::detail;
 
 namespace
 {

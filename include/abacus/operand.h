@@ -17,6 +17,8 @@
     along with this program.If not, see < https://www.gnu.org/licenses/>.
 */
 
+#include "datatypes.h"
+
 #include <memory>
 
 namespace abacus
@@ -28,5 +30,14 @@ namespace abacus
 
     class operand
     {
+    public:
+        operand(std::unique_ptr<detail::operand_pimpl>&&);
+        ~operand();
+
+        template <typename V>
+        abacus::result_type evaluate(const V& v) const;
+
+    private:
+        std::shared_ptr<detail::operand_pimpl> pimpl;
     };
 }
