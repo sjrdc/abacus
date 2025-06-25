@@ -22,7 +22,7 @@ TEST(parser, throws_upon_evaluating_undefined_variable)
     EXPECT_THROW(abacus::evaluate(operand), std::runtime_error);
 }
 
-TEST(evaluate, can_evaluate_variable_expression)
+TEST(parser, can_evaluate_variable_expression)
 {
     auto parser = abacus::parser();
     const auto operand = parser.parse("7*x-43");
