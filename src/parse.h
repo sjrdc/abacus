@@ -18,8 +18,10 @@
 */
 
 #include "ast.h"
+#include "store.h"
 
 namespace abacus::detail
 {
-    abacus::detail::ast::operand parse(const std::string& input);
+    ast::operand parse(const std::string& input);
+    ast::operand parse(const std::string& input, variable_store& store);
 }

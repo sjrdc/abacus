@@ -44,7 +44,7 @@ namespace abacus
             x3::forward_ast<detail::ast::unary_operation>,
             x3::forward_ast<detail::ast::binary_operation>,
             x3::forward_ast<detail::ast::expression>,
-            x3::forward_ast<detail::ast::ASTVariableType> >
+            x3::forward_ast<detail::ast::ASTVariableType>>
         {
             using base_type::base_type;
             using base_type::operator=;

@@ -17,15 +17,69 @@
 */
 
 #include "abacus/parser.h"
-#include "parse.h"
-#include "operand_pimpl.h"
 
+#include "operand_pimpl.h"
+#include "parse.h"
+#include "store.h"
+
+namespace 
+{
+    // trim from start (in place)
+    void ltrim(std::string &s) 
+    {
+        s.erase(s.begin(), std::find_if(s.begin(), s.end(), [](unsigned char ch) {
+            return !std::isspace(ch);
+        }));
+    }
+
+    // trim from end (in place)
+    void rtrim(std::string &s) 
+    {
+        s.erase(std::find_if(s.rbegin(), s.rend(), [](unsigned char ch) {
+            return !std::isspace(ch);
+        }).base(), s.end());
+    }
+    // trim from both ends (in place)
+    void trim(std::string &s) 
+    {
+        rtrim(s);
+        ltrim(s);
+    }
+}
 namespace abacus::detail
 {
+
     class parser_pimpl
     {
     public:
-    private:
+        abacus::operand parse(const std::string& expression)
+        {
+            if (expression.empty())
+            {
+                throw std::runtime_error("Cannot parse empty expression.");
+            }
+
+            auto q = std::unique_ptr<detail::operand_pimpl>();
+            if (const auto n = expression.find('='); n != std::string::npos)
+            {
+                // we're parsing an equation, not just an expression
+                // get the variable
+                auto name = expression.substr(0, n);
+                trim(name);
+                auto variable = store.get(name);
+                // and assign it an expression 
+                variable->value = detail::parse(expression.substr(n + 1), store);
+                q = std::make_unique<detail::operand_pimpl>(ast::operand(variable));
+            }
+            else
+            {
+                q = std::make_unique<detail::operand_pimpl>(detail::parse(expression, store));
+            }
+            return operand(std::move(q));
+        }
+
+      private:
+        variable_store store;
     };
 }
 
@@ -38,9 +92,8 @@ namespace abacus
 
     parser::~parser() = default;
 
-    operand parser::parse(std::string expression)
+    operand parser::parse(const std::string& expression)
     {
-        auto q = std::make_unique<detail::operand_pimpl>(detail::parse(expression));
-        return operand(std::move(q));
+        return pimpl->parse(expression);
     }
 }
