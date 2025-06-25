@@ -35,7 +35,7 @@ namespace abacus
         parser();
         ~parser();
         
-        operand parse(std::string);
+        operand parse(const std::string& expression);
 
     private:
         std::unique_ptr<detail::parser_pimpl> pimpl;

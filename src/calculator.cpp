@@ -62,7 +62,13 @@ namespace abacus::detail
 
     result_type calculator::operator()(const detail::ast::ASTVariableType& v) const
     {
+        if (!v)
+        {
+            throw std::runtime_error("Error evaluating variable null pointer.");
+        }
+
         if (v->value) return v->value->apply_visitor(*this);
+        
         throw std::runtime_error("Error evaluating variable '"
             + v->name + "' with no assigned value.");
     }
