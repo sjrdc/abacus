@@ -30,7 +30,7 @@ namespace abacus
             operand_pimpl(ast::operand);
             
             template <typename V>
-            V::result_type evaluate(const V&) const;
+            typename V::result_type evaluate(const V&) const;
 
         private:
             ast::operand operand;
