@@ -25,28 +25,27 @@
 
 namespace
 {
-    std::string string_from_args(int argc, char** argv)
+    std::string string_from_args(int argc, char **argv)
     {
         std::vector<std::string> strings(argv + 1, argv + argc);
         std::string concat;
-        std::for_each(strings.cbegin(), strings.cend(), 
-            [&concat](const auto& s){
-                concat += s;
-            });
+        std::for_each(strings.cbegin(), strings.cend(),
+                      [&concat](const auto &s)
+                      {
+                          concat += s;
+                      });
         return concat;
     }
 }
 
-int main(int argc, char** argv)
+int main(int argc, char **argv)
 {
-    if (argc <= 1)
+    std::string expression;
+    do
     {
-        std::cerr << "usage: " << argv[0] << " expression " << std::endl;
-        return 1;
-    }
-
-    const auto expression = string_from_args(argc, argv);
-
-    std::cout << expression << " = " << abacus::evaluate(expression) << std::endl;
+        std::cout << "> " << std::flush;
+        std::getline(std::cin, expression);
+        std::cout << expression << " = " << abacus::evaluate(expression) << std::endl;
+    } while (true);
     return 0;
 }
