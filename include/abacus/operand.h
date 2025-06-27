@@ -35,7 +35,7 @@ namespace abacus
         ~operand();
 
         template <typename V>
-        V::result_type evaluate(const V& v) const;
+        typename V::result_type evaluate(const V& v) const;
 
     private:
         std::shared_ptr<detail::operand_pimpl> pimpl;
