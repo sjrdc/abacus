@@ -17,27 +17,26 @@
     along with this program.If not, see < https://www.gnu.org/licenses/>.
 */
 
-#include "datatypes.h"
+#include "ast.h"
+#include "abacus.h"
+#include "abacus/operand.h"
 
-#include <memory>
-
-namespace abacus
+namespace abacus::detail
 {
-    namespace detail
-    {
-        class operand_pimpl;
-    }
-
-    class operand
+    class is_evaluatable
     {
     public:
-        operand(std::unique_ptr<detail::operand_pimpl>&&);
-        ~operand();
+        // needed for visitor
+        using result_type = bool;
+        
+        result_type operator()(const detail::ast::binary_operation&) const;
+        result_type operator()(double) const;
+        result_type operator()(const detail::ast::expression&) const;
+        result_type operator()(const detail::ast::nil&) const;
+        result_type operator()(const detail::ast::operand&) const;
+        result_type operator()(const detail::ast::unary_operation&) const;
+        result_type operator()(const detail::ast::ASTVariableType&) const;
 
-        template <typename V>
-        V::result_type evaluate(const V& v) const;
-
-    private:
-        std::shared_ptr<detail::operand_pimpl> pimpl;
+        result_type operator()(const abacus::operand&) const;
     };
 }
