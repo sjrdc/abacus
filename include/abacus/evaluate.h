@@ -27,4 +27,6 @@ namespace abacus
     result_type evaluate(std::string);
     result_type evaluate(const operand&);
     result_type evaluate(operand&&);
+    bool can_evaluate(const operand&);
+    bool can_evaluate(operand&&);
 }
