@@ -19,3 +19,4 @@
 
 #include "abacus/evaluate.h"
 #include "abacus/operand.h"
+#include "abacus/parser.h"

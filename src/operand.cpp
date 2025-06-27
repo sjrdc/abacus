@@ -17,6 +17,7 @@
 */
 
 #include "calculator.h"
+#include "is_evaluatable.h"
 #include "operand_pimpl.h"
 #include "parse.h"
 
@@ -30,9 +31,15 @@ namespace abacus
         }
 
         template <>
-        result_type operand_pimpl::evaluate(const calculator& calculator) const
+        calculator::result_type operand_pimpl::evaluate(const calculator& v) const
         {
-            return calculator(operand);
+            return v(operand);
+        }
+
+        template <>
+        is_evaluatable::result_type operand_pimpl::evaluate(const is_evaluatable& v) const
+        {
+            return v(operand);
         }
     }
 
@@ -45,8 +52,14 @@ namespace abacus
     }
 
     template <>
-    result_type operand::evaluate(const detail::calculator& calculator) const
+    result_type operand::evaluate(const detail::calculator& v) const
     {
-        return pimpl->evaluate(calculator);
+        return pimpl->evaluate(v);
+    }
+
+    template <>
+    detail::is_evaluatable::result_type operand::evaluate(const detail::is_evaluatable& v) const
+    {
+        return pimpl->evaluate(v);
     }
 }

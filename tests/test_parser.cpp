@@ -26,6 +26,9 @@ TEST(parser, can_evaluate_variable_expression)
 {
     auto parser = abacus::parser();
     const auto operand = parser.parse("7*x-43");
+    ASSERT_FALSE(abacus::can_evaluate(operand));
+    
     parser.parse("x = 3");
+    EXPECT_TRUE(abacus::can_evaluate(operand));
     EXPECT_EQ(7*3-43, abacus::evaluate(operand));
 }

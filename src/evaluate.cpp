@@ -17,11 +17,13 @@
 */
 
 #include "calculator.h"
+#include "is_evaluatable.h"
 #include "parse.h"
 
 namespace 
 {
     const abacus::detail::calculator calculator;
+    const abacus::detail::is_evaluatable is_evaluatable;
 }
 
 namespace abacus
@@ -40,5 +42,15 @@ namespace abacus
     result_type evaluate(operand&& o)
     {
         return ::calculator(o);
+    }
+
+    bool can_evaluate(const operand& o)
+    {
+        return ::is_evaluatable(o);
+    }
+
+    bool can_evaluate(operand&& o)
+    {
+        return ::is_evaluatable(o);
     }
 }

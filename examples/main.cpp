@@ -41,11 +41,14 @@ namespace
 int main(int argc, char **argv)
 {
     std::string expression;
+    abacus::parser parser;
     do
     {
         std::cout << "> " << std::flush;
         std::getline(std::cin, expression);
-        std::cout << expression << " = " << abacus::evaluate(expression) << std::endl;
+        const auto op = parser.parse(expression);
+        if (abacus::can_evaluate(op))
+            std::cout << expression << " = " << abacus::evaluate(op) << std::endl;
     } while (true);
     return 0;
 }
