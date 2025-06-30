@@ -27,18 +27,20 @@ int main(int argc, char **argv)
 {
     std::string expression;
     abacus::parser parser;
-    do
+    
+    std::cout << "> " << std::flush;
+    while(std::getline(std::cin, expression))
     {
-        std::cout << "> " << std::flush;
-        std::getline(std::cin, expression);
         const auto op = parser.parse(expression);
         if (abacus::can_evaluate(op))
             std::cout << abacus::evaluate(op) << std::endl;
         else 
         {
-            abacus::print(std::cout);
+            abacus::print(op, std::cout);
             std::cout << std::endl;
         }
-    } while (true);
+        std::cout << "> " << std::flush;
+    }
+    std::cout << "Exiting abacus." << std::endl;
     return 0;
 }
