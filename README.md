@@ -46,3 +46,5 @@ Similar to C++ variable naming rules,
 ### Numbers
 Numbers in expressions may be written as integers or floating points base-10 numbers. Internally 
 they are *always* represented as double precision floating point numbers. 
+
+## Example

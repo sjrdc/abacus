@@ -43,6 +43,10 @@ namespace abacus
     {
         return ::calculator(o);
     }
+    void print(std::ostream& os)
+    {
+        os << "hello, world!";
+    }
 
     bool can_evaluate(const operand& o)
     {

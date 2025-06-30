@@ -23,21 +23,6 @@
 #include <string>
 #include <vector>
 
-namespace
-{
-    std::string string_from_args(int argc, char **argv)
-    {
-        std::vector<std::string> strings(argv + 1, argv + argc);
-        std::string concat;
-        std::for_each(strings.cbegin(), strings.cend(),
-                      [&concat](const auto &s)
-                      {
-                          concat += s;
-                      });
-        return concat;
-    }
-}
-
 int main(int argc, char **argv)
 {
     std::string expression;
@@ -48,7 +33,12 @@ int main(int argc, char **argv)
         std::getline(std::cin, expression);
         const auto op = parser.parse(expression);
         if (abacus::can_evaluate(op))
-            std::cout << expression << " = " << abacus::evaluate(op) << std::endl;
+            std::cout << abacus::evaluate(op) << std::endl;
+        else 
+        {
+            abacus::print(std::cout);
+            std::cout << std::endl;
+        }
     } while (true);
     return 0;
 }
