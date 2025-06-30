@@ -16,8 +16,9 @@
     along with this program.If not, see < https://www.gnu.org/licenses/>.
 */
 
-#include "calculator.h"
-#include "is_evaluatable.h"
+#include "visitors/calculator.h"
+#include "visitors/is_evaluatable.h"
+#include "visitors/printer.h"
 #include "operand_pimpl.h"
 #include "parse.h"
 
@@ -41,6 +42,12 @@ namespace abacus
         {
             return v(operand);
         }
+        
+        template <>
+        printer::result_type operand_pimpl::evaluate(const printer& v) const
+        {
+            return v(operand);
+        }
     }
 
 
@@ -59,6 +66,12 @@ namespace abacus
 
     template <>
     detail::is_evaluatable::result_type operand::evaluate(const detail::is_evaluatable& v) const
+    {
+        return pimpl->evaluate(v);
+    }
+
+    template <>
+    detail::printer::result_type operand::evaluate(const detail::printer& v) const
     {
         return pimpl->evaluate(v);
     }

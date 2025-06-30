@@ -61,6 +61,8 @@ namespace abacus
             using function = std::function<double(double)>;
             function op;
             operand rhs;
+            
+            std::string op_name() const { return "function"; }
         };
 
         struct binary_operation
@@ -69,12 +71,15 @@ namespace abacus
             function op;
             operand lhs;
             operand rhs;
+
+            std::string op_name() const { return "function"; }
         };
 
         struct operation
         {
             binary_operation::function op;
             operand rhs;
+            std::string op_name() const { return "function"; }
         };
 
         struct expression

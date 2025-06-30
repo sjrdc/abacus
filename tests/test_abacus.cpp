@@ -18,7 +18,7 @@
 
 #include "abacus.h"
 #include "parse.h"
-#include "calculator.h"
+#include "visitors/calculator.h"
 
 #include <gtest/gtest.h>
 

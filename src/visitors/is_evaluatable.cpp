@@ -19,8 +19,8 @@
 #include "is_evaluatable.h"
 
 #include "abacus.h"
-#include "ast.h"
-#include "parse.h"
+#include "../ast.h"
+#include "../parse.h"
 
 
 namespace abacus::detail

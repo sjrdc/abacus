@@ -17,18 +17,18 @@
     along with this program.If not, see < https://www.gnu.org/licenses/>.
 */
 
-#include "ast.h"
+#include "../ast.h"
 #include "abacus.h"
 #include "abacus/operand.h"
 
 namespace abacus::detail
 {
-    class is_evaluatable
+    class calculator
     {
     public:
         // needed for visitor
-        using result_type = bool;
-        
+        using result_type = abacus::result_type;
+
         result_type operator()(const detail::ast::binary_operation&) const;
         result_type operator()(double) const;
         result_type operator()(const detail::ast::expression&) const;

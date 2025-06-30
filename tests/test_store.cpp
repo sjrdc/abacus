@@ -17,7 +17,7 @@
 */
 
 #include "abacus.h"
-#include "calculator.h"
+#include "visitors/calculator.h"
 #include "store.h"
 
 #include <gtest/gtest.h>

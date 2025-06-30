@@ -29,5 +29,5 @@ namespace abacus
     result_type evaluate(operand&&);
     bool can_evaluate(const operand&);
     bool can_evaluate(operand&&);
-    void print(std::ostream&);
+    void print(const operand&, std::ostream&);
 }

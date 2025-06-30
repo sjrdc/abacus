@@ -17,17 +17,21 @@
     along with this program.If not, see < https://www.gnu.org/licenses/>.
 */
 
-#include "ast.h"
+#include "../ast.h"
 #include "abacus.h"
 #include "abacus/operand.h"
 
+#include <ostream>
+
 namespace abacus::detail
 {
-    class calculator
+    class printer
     {
     public:
+        printer(std::ostream& os);
+
         // needed for visitor
-        using result_type = abacus::result_type;
+        using result_type = void;
 
         result_type operator()(const detail::ast::binary_operation&) const;
         result_type operator()(double) const;
@@ -38,5 +42,8 @@ namespace abacus::detail
         result_type operator()(const detail::ast::ASTVariableType&) const;
 
         result_type operator()(const abacus::operand&) const;
+
+    private:
+        std::ostream& ostream;
     };
 }

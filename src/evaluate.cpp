@@ -16,8 +16,9 @@
     along with this program.If not, see < https://www.gnu.org/licenses/>.
 */
 
-#include "calculator.h"
-#include "is_evaluatable.h"
+#include "visitors/calculator.h"
+#include "visitors/printer.h"
+#include "visitors/is_evaluatable.h"
 #include "parse.h"
 
 namespace 
@@ -43,9 +44,11 @@ namespace abacus
     {
         return ::calculator(o);
     }
-    void print(std::ostream& os)
+
+    void print(const operand& o, std::ostream& os)
     {
-        os << "hello, world!";
+        abacus::detail::printer printer(os);
+        printer(o);
     }
 
     bool can_evaluate(const operand& o)
