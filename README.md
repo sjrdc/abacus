@@ -1,10 +1,15 @@
 # abacus
 
 Abacus is a C++ library that supports parsing and evaluating basic mathematical expressions.
+
+## Expressions
+
 Expressions are composed of variables, functions and numbers.
 
 ### Functions
+
 We distinguish
+
 * unary functions; functions with a single argument
 * binary functions; functions with two arguments
 
@@ -12,11 +17,13 @@ Functions are written as the function name, followed by their argument(s) in bra
 one argument, arguments are separated by a comma. Arguments can be composed of other functions, variables or numbers.
 
 Example
-```
+
+```c++
 func(a, 5 * log(x))
 ```
 
 The following functions are supported
+
 | Function | Category | Meaning |
 | -------- | ------- | ------- |
 | sin| unary | sine |
@@ -39,12 +46,15 @@ The following functions are supported
 | max| binary | maximum of arguments |
 
 ### Variable naming rules
+
 Similar to C++ variable naming rules,
+
 * variable names may be composed of alphanumeric characters and underscores
 * a variable name shall start with a non-numeric character (hence, with an underscore or a letter)
 
 ### Numbers
-Numbers in expressions may be written as integers or floating points base-10 numbers. Internally 
-they are *always* represented as double precision floating point numbers. 
+
+Numbers in expressions may be written as integers or floating points base-10 numbers. Internally
+they are *always* represented as double precision floating point numbers.
 
 ## Example
