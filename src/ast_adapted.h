@@ -22,6 +22,7 @@
 
 BOOST_FUSION_ADAPT_STRUCT(abacus::detail::ast::expression, lhs, rhs)
 BOOST_FUSION_ADAPT_STRUCT(abacus::detail::ast::binary_operation, op, lhs, rhs)
+BOOST_FUSION_ADAPT_STRUCT(abacus::detail::ast::ternary_operation, op, arg1, arg2, arg3)
 BOOST_FUSION_ADAPT_STRUCT(abacus::detail::ast::operation, op, rhs)
 BOOST_FUSION_ADAPT_STRUCT(abacus::detail::ast::unary_operation, op, rhs)
 BOOST_FUSION_ADAPT_STRUCT(abacus::detail::ast::variable, name, value)
