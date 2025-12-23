@@ -33,6 +33,7 @@ namespace abacus
         struct nil {};
         struct unary_operation;
         struct binary_operation;
+        struct ternary_operation;
         struct expression;
         struct variable;
 
@@ -43,6 +44,7 @@ namespace abacus
             double,
             x3::forward_ast<detail::ast::unary_operation>,
             x3::forward_ast<detail::ast::binary_operation>,
+            x3::forward_ast<detail::ast::ternary_operation>,
             x3::forward_ast<detail::ast::expression>,
             x3::forward_ast<detail::ast::ASTVariableType>>
         {
@@ -69,6 +71,15 @@ namespace abacus
             function op;
             operand lhs;
             operand rhs;
+        };
+
+        struct ternary_operation
+        {
+            using function = std::function<double(double, double, double)>;
+            function op;
+            operand arg1;
+            operand arg2;
+            operand arg3;
         };
 
         struct operation

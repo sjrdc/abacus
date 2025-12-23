@@ -81,6 +81,13 @@ namespace abacus
                 }
             };
 
+            struct ternary_function_symbol : x3::symbols<ast::ternary_operation::function>
+            {
+                ternary_function_symbol()
+                {
+                }
+            };
+
             struct additive_symbol : x3::symbols<ast::binary_operation::function>
             {
                 additive_symbol() 
@@ -128,6 +135,7 @@ namespace abacus
             struct primary_class : error_handler {};
             struct unary_class : error_handler {};
             struct binary_class : error_handler {};
+            struct ternary_class : error_handler {};
             struct variable_class : error_handler {};
             struct identifier_class : error_handler {};
             struct constant_class : error_handler {};
@@ -140,6 +148,7 @@ namespace abacus
             constexpr auto factor_rule = x3::rule<factor_class, ast::expression>{ "factor" };
             constexpr auto unary_rule = x3::rule<unary_class, ast::unary_operation>{ "unary" };
             constexpr auto binary_rule = x3::rule<binary_class, ast::binary_operation>{ "binary" };
+            constexpr auto ternary_rule = x3::rule<ternary_class, ast::ternary_operation>{ "ternary" };
             constexpr auto variable_rule = x3::rule<variable_class, ast::ASTVariableType>{ "variable" };
             constexpr auto identifier_rule = x3::rule<identifier_class, std::string>{ "identifier" };
             constexpr auto constant_rule = x3::rule<constant_class, double>{ "constant" };
@@ -163,6 +172,9 @@ namespace abacus
             const auto binary_rule_def =
                 binary_function_symbol() >> '(' >> expression_rule >> ',' >> expression_rule >> ')';
 
+            const auto ternary_rule_def =
+                ternary_function_symbol() >> '(' >> expression_rule >> ',' >> expression_rule >> ')';
+
             constexpr auto make_variable =
                 [](auto& context)
                 {
@@ -178,6 +190,7 @@ namespace abacus
                 x3::double_
                 | constant_rule
                 | ('(' >> expression_rule >> ')')
+                | ternary_rule
                 | binary_rule
                 | unary_rule
                 | variable_rule
@@ -191,6 +204,7 @@ namespace abacus
                 factor_rule,
                 unary_rule,
                 binary_rule,
+                ternary_rule,
                 identifier_rule,
                 variable_rule,
                 primary_rule
