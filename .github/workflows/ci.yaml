@@ -59,7 +59,7 @@ jobs:
         sudo apt-get update && sudo apt-get install build-essential libc++-17-dev and libc++abi-17-dev
     
     - name: Install boost
-      uses: MarkusJx/install-boost@v2.4.5
+      uses: MarkusJx/install-boost@v2.5.1
       id: install-boost
       with:
         # REQUIRED: Specify the required boost version
