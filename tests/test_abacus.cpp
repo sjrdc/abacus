@@ -22,6 +22,7 @@
 
 #include <gtest/gtest.h>
 
+#include <algorithm>
 #include <numbers>
 
 #define MAKE_TEST_VALUE(VAR) test_parameter(#VAR, VAR)
@@ -65,7 +66,9 @@ namespace
         MAKE_TEST_VALUE_FROM_STD_FUNCTION(log(1.)),
         MAKE_TEST_VALUE_FROM_STD_FUNCTION(abs(-1.)),
         MAKE_TEST_VALUE_FROM_STD_FUNCTION(min(-1., 5.)),
-        MAKE_TEST_VALUE_FROM_STD_FUNCTION(max(-1., 5.))
+        MAKE_TEST_VALUE_FROM_STD_FUNCTION(max(-1., 5.)),
+        MAKE_TEST_VALUE_FROM_STD_FUNCTION(clamp(3., 1., 2.)),
+        MAKE_TEST_VALUE_FROM_STD_FUNCTION(clamp(-1., 1., 2.))
     );
 }
 
