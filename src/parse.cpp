@@ -21,6 +21,7 @@
 
 #include <boost/spirit/home/x3/string/symbols.hpp>
 
+#include <algorithm>
 #include <exception>
 #include <functional>
 #include <iostream>
@@ -85,6 +86,8 @@ namespace abacus
             {
                 ternary_function_symbol()
                 {
+                    add
+                        ("clamp", [](double value, double min, double max) { return std::clamp(value, min, max); });
                 }
             };
 
