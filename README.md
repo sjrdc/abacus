@@ -38,6 +38,7 @@ The following functions are supported
 | atan2| binary | two argument arctangent |
 | min| binary | minimum of arguments |
 | max| binary | maximum of arguments |
+| clamp | ternary | clamp a value to a given range |
 
 ### Variable naming rules
 Similar to C++ variable naming rules,
