@@ -24,17 +24,17 @@
 
 namespace abacus::detail
 {
-    result_type calculator::operator()(double d) const
+    calculator::result_type calculator::operator()(double d) const
     {
         return d;
     }
 
-    result_type calculator::operator()(const detail::ast::nil&) const
+    calculator::result_type calculator::operator()(const detail::ast::nil&) const
     {
         throw std::runtime_error("operation not implemented");
     }
 
-    result_type calculator::operator()(const detail::ast::expression& e) const
+    calculator::result_type calculator::operator()(const detail::ast::expression& e) const
     {
         auto r = e.lhs.apply_visitor(*this);
         for (auto& o : e.rhs)
@@ -45,27 +45,27 @@ namespace abacus::detail
         return r;
     }
 
-    result_type calculator::operator()(const detail::ast::binary_operation& f) const
+    calculator::result_type calculator::operator()(const detail::ast::binary_operation& f) const
     {
         return f.op(f.lhs.apply_visitor(*this), f.rhs.apply_visitor(*this));
     }
     
-    result_type calculator::operator()(const detail::ast::ternary_operation& f) const
+    calculator::result_type calculator::operator()(const detail::ast::ternary_operation& f) const
     {
         return f.op(f.arg1.apply_visitor(*this), f.arg2.apply_visitor(*this), f.arg3.apply_visitor(*this));
     }
     
-    result_type calculator::operator()(const detail::ast::unary_operation& f) const
+    calculator::result_type calculator::operator()(const detail::ast::unary_operation& f) const
     {
         return f.op(f.rhs.apply_visitor(*this));
     }
 
-    result_type calculator::operator()(const detail::ast::operand& o) const
+    calculator::result_type calculator::operator()(const detail::ast::operand& o) const
     {
         return o.apply_visitor(*this);
     }
 
-    result_type calculator::operator()(const detail::ast::ASTVariableType& v) const
+    calculator::result_type calculator::operator()(const detail::ast::ASTVariableType& v) const
     {
         if (!v)
         {
@@ -78,7 +78,7 @@ namespace abacus::detail
             + v->name + "' with no assigned value.");
     }
 
-    result_type calculator::operator()(const abacus::operand& o) const
+    calculator::result_type calculator::operator()(const abacus::operand& o) const
     {
         return o.evaluate(*this);
     }
