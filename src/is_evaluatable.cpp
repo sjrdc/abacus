@@ -51,7 +51,7 @@ namespace abacus::detail
         return f.lhs.apply_visitor(*this) && f.rhs.apply_visitor(*this);
     }
     
-    result_type calculator::operator()(const detail::ast::ternary_operation& f) const
+    is_evaluatable::result_type is_evaluatable::operator()(const detail::ast::ternary_operation& f) const
     {
         return f.arg1.apply_visitor(*this) && f.arg2.apply_visitor(*this) && f.arg3.apply_visitor(*this));
     }
