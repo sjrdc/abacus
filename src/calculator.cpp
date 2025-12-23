@@ -50,6 +50,11 @@ namespace abacus::detail
         return f.op(f.lhs.apply_visitor(*this), f.rhs.apply_visitor(*this));
     }
     
+    result_type calculator::operator()(const detail::ast::ternary_operation& f) const
+    {
+        return f.op(f.arg1.apply_visitor(*this), f.arg2.apply_visitor(*this), f.arg3.apply_visitor(*this));
+    }
+    
     result_type calculator::operator()(const detail::ast::unary_operation& f) const
     {
         return f.op(f.rhs.apply_visitor(*this));

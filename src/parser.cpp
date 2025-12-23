@@ -46,6 +46,7 @@ namespace
         ltrim(s);
     }
 }
+
 namespace abacus::detail
 {
 
