@@ -173,7 +173,7 @@ namespace abacus
                 binary_function_symbol() >> '(' >> expression_rule >> ',' >> expression_rule >> ')';
 
             const auto ternary_rule_def =
-                ternary_function_symbol() >> '(' >> expression_rule >> ',' >> expression_rule >> ')';
+                ternary_function_symbol() >> '(' >> expression_rule >> ',' >> expression_rule >> ',' >> expression_rule >> ')';
 
             constexpr auto make_variable =
                 [](auto& context)
